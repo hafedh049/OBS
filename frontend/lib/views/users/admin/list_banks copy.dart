@@ -133,15 +133,7 @@ class _BanksListState extends State<BanksList> {
                                                 children: <Widget>[
                                                   Row(
                                                     children: <Widget>[
-                                                      Text("Bank ID", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
-                                                      const SizedBox(width: 10),
-                                                      Text(item.bankID, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Text("Bank name", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                      Text("Bank", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
                                                       const SizedBox(width: 10),
                                                       Text(item.bankName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
                                                     ],
@@ -149,7 +141,7 @@ class _BanksListState extends State<BanksList> {
                                                   const SizedBox(height: 10),
                                                   Row(
                                                     children: <Widget>[
-                                                      Text("Bank address", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                      Text("Vendeur", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
                                                       const SizedBox(width: 10),
                                                       Text(item.bankAddress, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
                                                     ],

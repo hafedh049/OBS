@@ -7,7 +7,8 @@ import Database.DatabaseHelper;
 
 public class Admin extends User {
         public Admin(DbDoc json) {
-                super(json.get("USERID"), json, password, email, "ADMIN");
+                super(json.get("USERID").toString(), json.get("USERNAME").toString(), json.get("PASSWORD").toString(),
+                                json.get("EMAIL").toString(), "ADMIN");
         }
 
         public void addBank(Bank bank) throws Exception {

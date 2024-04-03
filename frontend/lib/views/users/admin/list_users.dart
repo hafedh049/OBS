@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:frontend/views/auth/sign_in.dart';
-import 'package:frontend/models/bank_model.dart';
-import 'package:frontend/views/users/admin/add_bank.dart';
-import 'package:frontend/views/users/admin/delete_bank.dart';
+import 'package:frontend/models/user_model.dart';
+import 'package:frontend/views/users/admin/add_user.dart';
+import 'package:frontend/views/users/admin/delete_user.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:lottie/lottie.dart';
@@ -14,21 +14,21 @@ import '../../../utils/helpers/errored.dart';
 import '../../../utils/helpers/loading.dart';
 import '../../../utils/shared.dart';
 
-class BanksList extends StatefulWidget {
-  const BanksList({super.key});
+class UsersList extends StatefulWidget {
+  const UsersList({super.key});
 
   @override
-  State<BanksList> createState() => _BanksListState();
+  State<UsersList> createState() => _UsersListState();
 }
 
-class _BanksListState extends State<BanksList> {
-  final GlobalKey<State> _banksKey = GlobalKey<State>();
+class _UsersListState extends State<UsersList> {
+  final GlobalKey<State> _usersKey = GlobalKey<State>();
 
-  List<BankModel> _banks = <BankModel>[];
+  List<UserModel> _users = <UserModel>[];
 
-  Future<List<BankModel>> _loadBanks() async {
+  Future<List<UserModel>> _loadUsers() async {
     try {
-      return <BankModel>[];
+      return <UserModel>[];
     } catch (e) {
       return Future.error(e);
     }
@@ -45,7 +45,7 @@ class _BanksListState extends State<BanksList> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Text("Banks List", style: GoogleFonts.itim(fontSize: 22, fontWeight: FontWeight.w500, color: greyColor)),
+                Text("Users List", style: GoogleFonts.itim(fontSize: 22, fontWeight: FontWeight.w500, color: greyColor)),
                 const Spacer(),
                 AnimatedButton(
                   width: 100,
@@ -64,7 +64,7 @@ class _BanksListState extends State<BanksList> {
                     builder: (BuildContext context) => AlertDialog(
                       backgroundColor: scaffoldColor,
                       contentPadding: const EdgeInsets.all(16),
-                      content: AddBank(banks: _banks, callback: () => _banksKey.currentState!.setState(() {})),
+                      content: AddUser(users: _users, callback: () => _usersKey.currentState!.setState(() {})),
                     ),
                   ),
                 ),
@@ -91,19 +91,19 @@ class _BanksListState extends State<BanksList> {
             Container(width: MediaQuery.sizeOf(context).width, height: .3, color: greyColor, margin: const EdgeInsets.symmetric(vertical: 20)),
             Expanded(
               child: Center(
-                child: FutureBuilder<List<BankModel>>(
-                  future: _loadBanks(),
-                  builder: (BuildContext context, AsyncSnapshot<List<BankModel>> snapshot) {
+                child: FutureBuilder<List<UserModel>>(
+                  future: _loadUsers(),
+                  builder: (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
                     if (snapshot.hasData) {
-                      _banks = snapshot.data!;
+                      _users = snapshot.data!;
                       return StatefulBuilder(
-                        key: _banksKey,
-                        builder: (BuildContext context, void Function(void Function()) setS) => _banks.isEmpty
+                        key: _usersKey,
+                        builder: (BuildContext context, void Function(void Function()) setS) => _users.isEmpty
                             ? Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   LottieBuilder.asset("assets/lotties/empty.json", reverse: true),
-                                  Text("No banks yet.", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                  Text("No users yet.", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
                                 ],
                               )
                             : SingleChildScrollView(
@@ -114,7 +114,7 @@ class _BanksListState extends State<BanksList> {
                                   runSpacing: 20,
                                   spacing: 20,
                                   children: <Widget>[
-                                    for (final BankModel item in _banks)
+                                    for (final UserModel item in _users)
                                       InkWell(
                                         splashColor: transparentColor,
                                         hoverColor: transparentColor,
@@ -133,25 +133,37 @@ class _BanksListState extends State<BanksList> {
                                                 children: <Widget>[
                                                   Row(
                                                     children: <Widget>[
-                                                      Text("Bank ID", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                      Text("User ID", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
                                                       const SizedBox(width: 10),
-                                                      Text(item.bankID, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
+                                                      Text(item.userName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
                                                     ],
                                                   ),
                                                   const SizedBox(height: 10),
                                                   Row(
                                                     children: <Widget>[
-                                                      Text("Bank name", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                      Text("Username", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
                                                       const SizedBox(width: 10),
-                                                      Text(item.bankName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
+                                                      Text(item.userEmail, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
                                                     ],
                                                   ),
                                                   const SizedBox(height: 10),
                                                   Row(
                                                     children: <Widget>[
-                                                      Text("Bank address", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                      Text("E-mail", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
                                                       const SizedBox(width: 10),
-                                                      Text(item.bankAddress, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
+                                                      Text(item.userName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  Row(
+                                                    children: <Widget>[
+                                                      Text("Role", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                      const SizedBox(width: 10),
+                                                      Container(
+                                                        padding: const EdgeInsets.all(8),
+                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: greenColor),
+                                                        child: Text(item.userEmail, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
+                                                      ),
                                                     ],
                                                   ),
                                                 ],
@@ -161,7 +173,7 @@ class _BanksListState extends State<BanksList> {
                                                   context: context,
                                                   builder: (BuildContext context) => AlertDialog(
                                                     backgroundColor: scaffoldColor,
-                                                    content: DeleteBank(bankID: item.bankID, banks: _banks, callback: () => _banksKey.currentState!.setState(() {})),
+                                                    content: DeleteUser(userID: item.userID, users: _users, callback: () => _usersKey.currentState!.setState(() {})),
                                                   ),
                                                 ),
                                                 icon: const Icon(FontAwesome.delete_left_solid, size: 25, color: purpleColor),

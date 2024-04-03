@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 
 public class DatabaseHelper {
-        final private String url = "jdbc:mysql://localhost:3306/backend";
+        final private String url = "jdbc:mysql://localhost:3306/obs";
         final private String username = "root";
         final private String password = "";
 

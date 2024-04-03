@@ -4,25 +4,55 @@ import java.sql.ResultSet;
 
 import Database.DatabaseHelper;
 
-public class Login {
+import java.io.IOException;
+import com.sun.net.httpserver.HttpHandler;
+import com.mysql.cj.xdevapi.DbDoc;
+import com.mysql.cj.xdevapi.JsonParser;
+import com.sun.net.httpserver.HttpExchange;
+import java.io.OutputStream;
+import java.io.InputStream;
 
-	public static void login(String username, String password) throws Exception {
-		final ResultSet resultSet = DatabaseHelper.statement.executeQuery(
-				"SELECT USERNAME, PASSWORD FROM USERS WHERE USERNAME = '" + username + "'");
+public class Login implements HttpHandler {
 
-		if (!resultSet.next()) {
-			System.out.println("Username is incorrect!");
-			return;
-		} else {
-			while (resultSet.next()) {
-				if (resultSet.getString("USERNAME").equals(username)
-						&& resultSet.getString("PASSWORD").equals(password)) {
-					System.out.println("Login successful!");
-					return;
+	@Override
+	public void handle(HttpExchange exchange) throws IOException {
+		exchange.getResponseHeaders().set("Content-Type", "application/json");
+		exchange.sendResponseHeaders(200, 0);
+		final InputStream requestBody = exchange.getRequestBody();
+		final String request = new String(requestBody.readAllBytes());
+
+		final DbDoc json = JsonParser.parseDoc(request);
+
+		String response = "";
+
+		try {
+			final ResultSet resultSet = DatabaseHelper.statement.executeQuery(String.format(
+					"SELECT * FROM USERS WHERE USERNAME = %s;", json.get("username").toString()));
+			if (!resultSet.next()) {
+				response = "{\"data\":\"Username is incorrect!\"}";
+			} else {
+				resultSet.beforeFirst();
+
+				response = "{\"data\":\"Password is incorrect!\"}";
+
+				while (resultSet.next()) {
+					if (resultSet.getString("PASSWORD")
+							.equals(json.get("password").toString().replaceAll("\"", ""))) {
+						response = "{\"data\":{\"uid\":\"%s\",\"username\":\"%s\",\"email\":\"%s\",\"password\":\"%s\"}}"
+								.formatted(resultSet.getString("userid"), resultSet.getString("username"),
+										resultSet.getString("email"), resultSet.getString("password"));
+					}
 				}
+
 			}
-			System.out.println("Password is incorrect!");
+		} catch (Exception e) {
+			System.out.println(e);
 		}
 
+		final OutputStream responseBody = exchange.getResponseBody();
+
+		responseBody.write(response.getBytes());
+
+		responseBody.close();
 	}
 }

@@ -9,3 +9,5 @@ const Color greenColor = Colors.greenAccent;
 const Color blueColor = Colors.blueAccent;
 const Color redColor = Colors.red;
 const Color transparentColor = Colors.transparent;
+
+const String ip = "127.0.0.1:8000";

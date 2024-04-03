@@ -29,10 +29,10 @@ public class SavingsAccount extends BankAccount {
 		this.withdrawalLimit = withdrawalLimit;
 	}
 
-	public SavingsAccount(String accountHolderName, double balance, String accountType, String accountBankID,
+	public SavingsAccount(String accountHolderName, double balance, String accountBankID,
 			String accountHolderID,
 			boolean isActive, double maxWithLimit, double interestRate, double minimumBalance, int withdrawalLimit) {
-		super(accountHolderName, balance, accountType, accountBankID,
+		super(accountHolderName, balance, "SAVINGS", accountBankID,
 				accountHolderID, isActive);
 		this.interestRate = interestRate;
 		this.minimumBalance = minimumBalance;

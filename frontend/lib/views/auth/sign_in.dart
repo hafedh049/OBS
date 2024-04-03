@@ -1,10 +1,10 @@
 import 'package:animated_loading_border/animated_loading_border.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:frontend/utils/shared.dart';
 import 'package:frontend/views/auth/sign_up.dart';
-import 'package:frontend/views/home.dart';
 import 'package:frontend/views/users/admin/list_banks.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -35,7 +35,15 @@ class _SignInState extends State<SignIn> {
     } else {
       _cardKey.currentState!.setState(() => _submitButtonState = true);
       try {
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const BanksList()), (Route route) => false);
+        final Response response = await Dio().post(
+          "$ip/signUser",
+          data: <String, dynamic>{
+            "username": _usernameController.text,
+            "password": _passwordController.text,
+          },
+        );
+        print(response.data);
+        //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const BanksList()), (Route route) => false);
       } catch (e) {
         _cardKey.currentState!.setState(() => _submitButtonState = false);
         showToast(context, e.toString(), redColor);
@@ -75,7 +83,7 @@ class _SignInState extends State<SignIn> {
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            Text("WELCOME TO ONLINE BANKING SYSTEM", style: GoogleFonts.itim(fontSize: 22, fontWeight: FontWeight.w500, color: greyColor)),
+                            Expanded(child: Text("WELCOME TO ONLINE BANKING SYSTEM", style: GoogleFonts.itim(fontSize: 22, fontWeight: FontWeight.w500, color: greyColor))),
                             const Spacer(),
                             AnimatedButton(
                               width: 200,

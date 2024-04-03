@@ -20,7 +20,7 @@ public class CreateUserHelper implements HttpHandler {
 
         final DbDoc json = JsonParser.parseDoc(request);
 
-        // System.out.println(json.getOrDefault("voice", null));
+        System.out.println(json.getOrDefault("voice", null));
 
         final OutputStream responseBody = exchange.getResponseBody();
         final String response = "Hello from Java HTTP Server!";

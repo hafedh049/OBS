@@ -1,5 +1,6 @@
 
 import Database.DatabaseHelper;
+import GUI.Login;
 import Helper.CreateUserHelper;
 
 import java.net.InetSocketAddress;
@@ -10,9 +11,9 @@ public class Application {
 		try {
 			new DatabaseHelper();
 			System.out.println("Connected to database!");
-			HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+			HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", 8000), 0);
 			server.createContext("/createUser", new CreateUserHelper());
-			server.createContext("/signUser", new CreateUserHelper());
+			server.createContext("/signUser", new Login());
 			server.createContext("/createCurrentAccount", new CreateUserHelper());
 			server.createContext("/createSavingsAccount", new CreateUserHelper());
 			server.start();

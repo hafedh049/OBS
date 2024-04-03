@@ -11,15 +11,25 @@ public class Transaction {
     private double amount;
     private Date transactionDate;
     private String description;
+    private String transactionState;
 
     public Transaction(String from, String to, double amount, Date transactionDate,
-            String description) {
+            String description, String transaction) {
         this.transactionID = UUID.randomUUID().toString();
         this.from = from;
         this.to = to;
         this.amount = amount;
         this.transactionDate = transactionDate;
         this.description = description;
+        this.transactionState = transaction;
+    }
+
+    public String getTransactionState() {
+        return transactionState;
+    }
+
+    public void setTransactionState(String transactionState) {
+        this.transactionState = transactionState;
     }
 
     public String getTransactionID() {
