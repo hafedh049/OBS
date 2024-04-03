@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:frontend/utils/shared.dart';
+import 'package:frontend/views/auth/sign_up.dart';
 import 'package:frontend/views/home.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
@@ -33,7 +34,7 @@ class _SignInState extends State<SignIn> {
     } else {
       _cardKey.currentState!.setState(() => _submitButtonState = true);
       try {
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const Home()));
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const Home()), (Route route) => false);
       } catch (e) {
         _cardKey.currentState!.setState(() => _submitButtonState = false);
         showToast(context, e.toString(), redColor);
@@ -71,7 +72,26 @@ class _SignInState extends State<SignIn> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Text("WELCOME TO ONLINE BANKING SYSTEM", style: GoogleFonts.itim(fontSize: 22, fontWeight: FontWeight.w500, color: greyColor)),
+                        Row(
+                          children: <Widget>[
+                            Text("WELCOME TO ONLINE BANKING SYSTEM", style: GoogleFonts.itim(fontSize: 22, fontWeight: FontWeight.w500, color: greyColor)),
+                            const Spacer(),
+                            AnimatedButton(
+                              width: 200,
+                              height: 40,
+                              text: 'CREATE ACCOUNT',
+                              selectedTextColor: whiteColor,
+                              animatedOn: AnimatedOn.onHover,
+                              animationDuration: 500.ms,
+                              isReverse: true,
+                              selectedBackgroundColor: greyColor.withOpacity(.1),
+                              backgroundColor: greenColor,
+                              transitionType: TransitionType.TOP_TO_BOTTOM,
+                              textStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
+                              onPress: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SignUp())),
+                            ),
+                          ],
+                        ),
                         const SizedBox(height: 10),
                         Container(width: MediaQuery.sizeOf(context).width, height: .3, color: greyColor, margin: const EdgeInsets.symmetric(vertical: 20)),
                         Row(

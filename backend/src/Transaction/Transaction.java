@@ -1,36 +1,41 @@
 package Transaction;
 
-import java.util.Date;
+import java.util.*;
+
+import Database.DatabaseHelper;
 
 public class Transaction {
-    private int transactionID;
-    private int userID;
+    private String transactionID;
+    private String from;
+    private String to;
     private double amount;
     private Date transactionDate;
     private String description;
 
-    public Transaction(int transactionID, int userID, double amount, Date transactionDate, String description) {
-        this.transactionID = transactionID;
-        this.userID = userID;
+    public Transaction(String from, String to, double amount, Date transactionDate,
+            String description) {
+        this.transactionID = UUID.randomUUID().toString();
+        this.from = from;
+        this.to = to;
         this.amount = amount;
         this.transactionDate = transactionDate;
         this.description = description;
     }
 
-    public int getTransactionID() {
+    public String getTransactionID() {
         return transactionID;
     }
 
-    public void setTransactionID(int transactionID) {
+    public void setTransactionID(String transactionID) {
         this.transactionID = transactionID;
     }
 
-    public int getUserID() {
-        return userID;
+    public String getFrom() {
+        return from;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setTo(String to) {
+        this.to = to;
     }
 
     public double getAmount() {
@@ -57,4 +62,13 @@ public class Transaction {
         this.description = description;
     }
 
+    public void makeTransaction() throws Exception {
+        DatabaseHelper.statement.execute(String.format("INSERT INTO TRANSACTIONS VALUES('%s','%s','%s',%.2f,%tF,'%s');",
+                transactionID, from, to, amount, transactionDate, description));
+    }
+
+    public void deleteTransaction() throws Exception {
+        DatabaseHelper.statement
+                .execute(String.format("DELETE FROM TRANSACTIONS WHERE TRANSACTIONID = %s;", transactionID));
+    }
 }
