@@ -10,6 +10,6 @@ class CreateBank extends StatefulWidget {
 class _CreateBankState extends State<CreateBank> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Scaffold();
   }
 }
