@@ -27,10 +27,11 @@ public class DatabaseHelper {
                                 ");");
                 statement.execute("CREATE TABLE IF NOT EXISTS USERS (\r\n" +
                                 "    USERID VARCHAR(255) ,\r\n" +
-                                "    USERNAME VARCHAR(50) UNIQUE,\r\n" +
+                                "    USERNAME VARCHAR(50),\r\n" +
                                 "    PASSWORD VARCHAR(255),\r\n" +
-                                "    EMAIL VARCHAR(100) UNIQUE,\r\n" +
-                                "    PRIMARY KEY (USERID,EMAIL)\r\n" +
+                                "    EMAIL VARCHAR(100),\r\n" +
+                                "    ROLE VARCHAR(100),\r\n" +
+                                "    PRIMARY KEY (USERID,USERNAME,EMAIL,PASSWORD)\r\n" +
                                 ");");
 
                 statement.execute("CREATE TABLE IF NOT EXISTS TRANSACTIONS (\r\n" +

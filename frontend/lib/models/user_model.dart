@@ -8,10 +8,10 @@ class UserModel {
   UserModel({required this.userID, required this.userName, required this.userEmail, required this.userPassword, required this.userRole});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(userID: json['userID'], userName: json['userName'], userEmail: json['userEmail'], userPassword: json['userPassword'], userRole: json['userRole']);
+    return UserModel(userID: json['uid'], userName: json['username'], userEmail: json['email'], userPassword: json['password'], userRole: json['role']);
   }
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{'userID': userID, 'userName': userName, 'userEmail': userEmail, 'userPassword': userPassword, 'userRole': userRole};
+    return <String, dynamic>{'uid': userID, 'username': userName, 'email': userEmail, 'password': userPassword, 'role': userRole};
   }
 }

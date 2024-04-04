@@ -38,9 +38,10 @@ public class Login implements HttpHandler {
 				while (resultSet.next()) {
 					if (resultSet.getString("PASSWORD")
 							.equals(json.get("password").toString().replaceAll("\"", ""))) {
-						response = "{\"data\":{\"uid\":\"%s\",\"username\":\"%s\",\"email\":\"%s\",\"password\":\"%s\"}}"
+						response = "{\"data\":{\"uid\":\"%s\",\"username\":\"%s\",\"email\":\"%s\",\"password\":\"%s\",\"role\":\"%s\"}}"
 								.formatted(resultSet.getString("userid"), resultSet.getString("username"),
-										resultSet.getString("email"), resultSet.getString("password"));
+										resultSet.getString("email"), resultSet.getString("password"),
+										resultSet.getString("role"));
 					}
 				}
 

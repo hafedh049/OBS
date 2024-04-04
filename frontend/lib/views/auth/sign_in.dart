@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
+import 'package:frontend/models/user_model.dart';
 import 'package:frontend/utils/shared.dart';
 import 'package:frontend/views/auth/sign_up.dart';
 import 'package:frontend/views/users/admin/list_banks.dart';
@@ -42,10 +43,18 @@ class _SignInState extends State<SignIn> {
             "password": _passwordController.text,
           },
         );
-        print(response.data);
-        //Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const BanksList()), (Route route) => false);
+        if (response.data["data"] is Map<String, dynamic>) {
+          user = UserModel.fromJson(response.data["data"]);
+          // ignore: use_build_context_synchronously
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const BanksList()), (Route route) => false);
+        } else {
+          _cardKey.currentState!.setState(() => _submitButtonState = false);
+          // ignore: use_build_context_synchronously
+          showToast(context, response.data["data"], redColor);
+        }
       } catch (e) {
         _cardKey.currentState!.setState(() => _submitButtonState = false);
+        // ignore: use_build_context_synchronously
         showToast(context, e.toString(), redColor);
       }
     }
