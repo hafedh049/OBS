@@ -67,7 +67,7 @@ class _PasswordStrengthState extends State<PasswordStrength> {
               isCrossed: _containsAlpha,
               duration: 500.ms,
               color: greenColor,
-              child: Text("Contains alphabetics : [a-zA-Z]*", style: GoogleFonts.itim(fontSize: 14, fontWeight: FontWeight.w500, color: whiteColor)),
+              child: Text("Contains alphabetics : [a-zA-Z]*", style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor)),
             )
           ],
         ),
@@ -82,7 +82,7 @@ class _PasswordStrengthState extends State<PasswordStrength> {
               isCrossed: _containsNum,
               duration: 500.ms,
               color: greenColor,
-              child: Text("Contains numerics : [0-9]*", style: GoogleFonts.itim(fontSize: 14, fontWeight: FontWeight.w500, color: whiteColor)),
+              child: Text("Contains numerics : [0-9]*", style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor)),
             )
           ],
         ),
@@ -97,7 +97,7 @@ class _PasswordStrengthState extends State<PasswordStrength> {
               isCrossed: _checkLength,
               duration: 500.ms,
               color: greenColor,
-              child: Text("More than 8 characters", style: GoogleFonts.itim(fontSize: 14, fontWeight: FontWeight.w500, color: whiteColor)),
+              child: Text("More than 8 characters", style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor)),
             )
           ],
         ),

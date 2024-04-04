@@ -5,12 +5,15 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/utils/shared.dart';
+import 'package:frontend/views/auth/reset_password.dart';
 import 'package:frontend/views/auth/sign_up.dart';
-import 'package:frontend/views/users/admin/list_banks.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 
 import '../../utils/callbacks.dart';
+import '../users/client/holder.dart';
+import '../users/admin/holder.dart';
+import '../users/agent/holder.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -46,7 +49,17 @@ class _SignInState extends State<SignIn> {
         if (response.data["data"] is Map<String, dynamic>) {
           user = UserModel.fromJson(response.data["data"]);
           // ignore: use_build_context_synchronously
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const BanksList()), (Route route) => false);
+          Navigator.pushAndRemoveUntil(
+            // ignore: use_build_context_synchronously
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => user!.userRole == "ADMIN"
+                    ? const AdminHolder()
+                    : user!.userRole == "AGENT"
+                        ? const AgentHolder()
+                        : const ClientHolder()),
+            (Route route) => false,
+          );
         } else {
           _cardKey.currentState!.setState(() => _submitButtonState = false);
           // ignore: use_build_context_synchronously
@@ -204,6 +217,22 @@ class _SignInState extends State<SignIn> {
                                 ),
                                 const SizedBox(width: 10),
                                 AnimatedOpacity(opacity: _submitButtonState ? 1 : 0, duration: 300.ms, child: const Icon(FontAwesome.bookmark_solid, color: purpleColor, size: 35)),
+                                const SizedBox(width: 10),
+                                const Spacer(),
+                                AnimatedButton(
+                                  width: 150,
+                                  height: 40,
+                                  text: 'RESET PASSWORD',
+                                  selectedTextColor: darkColor,
+                                  animatedOn: AnimatedOn.onHover,
+                                  animationDuration: 500.ms,
+                                  isReverse: true,
+                                  selectedBackgroundColor: redColor,
+                                  backgroundColor: purpleColor,
+                                  transitionType: TransitionType.TOP_TO_BOTTOM,
+                                  textStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
+                                  onPress: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const ResetPassword())),
+                                ),
                               ],
                             );
                           },

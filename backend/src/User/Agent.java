@@ -1,9 +1,11 @@
 package User;
 
+import com.mysql.cj.xdevapi.DbDoc;
+
 public class Agent extends User {
 
-    public Agent(String userID, String username, String password, String email) {
-        super(userID, username, password, email, "AGENT");
+    public Agent(DbDoc json) {
+        super(json);
     }
 
 }

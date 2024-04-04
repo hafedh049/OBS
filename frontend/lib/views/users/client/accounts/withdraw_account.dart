@@ -5,7 +5,7 @@ import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-import '../../utils/shared.dart';
+import '../../../../utils/shared.dart';
 
 class WithdrawFromAccount extends StatefulWidget {
   const WithdrawFromAccount({super.key});

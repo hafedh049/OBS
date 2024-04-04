@@ -2,37 +2,17 @@ package Bank;
 
 import java.util.UUID;
 
-import Database.DatabaseHelper;
+import com.mysql.cj.xdevapi.DbDoc;
 
-public class Bank {
+public final class Bank {
 	private final String bankID;
 	private String bankName;
 	private String bankAddress;
 
-	public Bank(String name, String address, int branches, int customers) {
+	public Bank(DbDoc json) {
 		this.bankID = UUID.randomUUID().toString();
-		this.bankName = name;
-		this.bankAddress = address;
-	}
-
-	public void addBank() throws Exception {
-		DatabaseHelper.statement
-				.execute(String.format("INSERT INTO BANKS VALUES('%s','%s','%s');",
-						bankID, bankName, bankAddress));
-	}
-
-	public void updateBank() throws Exception {
-		DatabaseHelper.statement
-				.execute(String.format("UPDATE BANKS SET BANKNAME='%s',BANKADDRESS='%s';",
-						bankName, bankAddress));
-	}
-
-	public void removeBank() throws Exception {
-		DatabaseHelper.statement
-				.execute(
-						String.format(
-								"DELETE FROM BANKS WHERE UPPER(BANKNAME) = UPPER('%s') AND UPPER(BANKADDRESS) = UPPER('%s');",
-								bankName, bankAddress));
+		this.bankName = json.get("bankname").toString().replaceAll("\"", "");
+		this.bankAddress = json.get("bankaddress").toString().replaceAll("\"", "");
 	}
 
 	public void setBankName(String bankName) {

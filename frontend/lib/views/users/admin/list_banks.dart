@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
@@ -28,7 +29,12 @@ class _BanksListState extends State<BanksList> {
 
   Future<List<BankModel>> _loadBanks() async {
     try {
-      return <BankModel>[];
+      final Response response = await Dio().get("$ip/getAllBanks");
+      final List<BankModel> banks = <BankModel>[];
+      for (final e in response.data["data"]) {
+        banks.add(BankModel.fromJson(e));
+      }
+      return banks;
     } catch (e) {
       return Future.error(e);
     }
@@ -64,7 +70,7 @@ class _BanksListState extends State<BanksList> {
                     builder: (BuildContext context) => AlertDialog(
                       backgroundColor: scaffoldColor,
                       contentPadding: const EdgeInsets.all(16),
-                      content: AddBank(banks: _banks, callback: () => _banksKey.currentState!.setState(() {})),
+                      content: SizedBox(width: MediaQuery.sizeOf(context).width * .7, child: AddBank(banks: _banks, callback: () => _banksKey.currentState!.setState(() {}))),
                     ),
                   ),
                 ),
@@ -82,7 +88,7 @@ class _BanksListState extends State<BanksList> {
                   transitionType: TransitionType.TOP_TO_BOTTOM,
                   textStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
                   onPress: () async {
-                    showToast(context, "Salamou alaykom", redColor);
+                    showToast(context, "Have a nice day", redColor);
                     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const SignIn()), (Route route) => false);
                   },
                 ),
@@ -106,72 +112,66 @@ class _BanksListState extends State<BanksList> {
                                   Text("No banks yet.", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
                                 ],
                               )
-                            : SingleChildScrollView(
-                                child: Wrap(
-                                  alignment: WrapAlignment.center,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  runAlignment: WrapAlignment.center,
-                                  runSpacing: 20,
-                                  spacing: 20,
-                                  children: <Widget>[
-                                    for (final BankModel item in _banks)
-                                      InkWell(
-                                        splashColor: transparentColor,
-                                        hoverColor: transparentColor,
-                                        highlightColor: transparentColor,
-                                        onTap: () {},
-                                        child: Container(
-                                          width: 300,
-                                          padding: const EdgeInsets.all(16),
-                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: darkColor),
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: <Widget>[
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: <Widget>[
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Text("Bank ID", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
-                                                      const SizedBox(width: 10),
-                                                      Text(item.bankID, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Text("Bank name", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
-                                                      const SizedBox(width: 10),
-                                                      Text(item.bankName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Text("Bank address", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
-                                                      const SizedBox(width: 10),
-                                                      Text(item.bankAddress, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                              IconButton(
-                                                onPressed: () => showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) => AlertDialog(
-                                                    backgroundColor: scaffoldColor,
-                                                    content: DeleteBank(bankID: item.bankID, banks: _banks, callback: () => _banksKey.currentState!.setState(() {})),
-                                                  ),
-                                                ),
-                                                icon: const Icon(FontAwesome.delete_left_solid, size: 25, color: purpleColor),
-                                              ),
-                                            ],
-                                          ),
+                            : ListView.separated(
+                                itemBuilder: (BuildContext context, int index) => InkWell(
+                                  splashColor: transparentColor,
+                                  hoverColor: transparentColor,
+                                  highlightColor: transparentColor,
+                                  onTap: () {},
+                                  child: Container(
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: darkColor),
+                                    child: Stack(
+                                      alignment: Alignment.topRight,
+                                      children: <Widget>[
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Row(
+                                              children: <Widget>[
+                                                Text("Bank ID", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                const SizedBox(width: 10),
+                                                Text(_banks[index].bankID, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              children: <Widget>[
+                                                Text("Bank name", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                const SizedBox(width: 10),
+                                                Text(_banks[index].bankName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              children: <Widget>[
+                                                Text("Bank address", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                const SizedBox(width: 10),
+                                                Text(_banks[index].bankAddress, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                  ],
+                                        IconButton(
+                                          onPressed: () => showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) => AlertDialog(
+                                              backgroundColor: scaffoldColor,
+                                              content: SizedBox(
+                                                width: MediaQuery.sizeOf(context).width * .7,
+                                                child: DeleteBank(bankID: _banks[index].bankID, banks: _banks, callback: () => _banksKey.currentState!.setState(() {})),
+                                              ),
+                                            ),
+                                          ),
+                                          icon: const Icon(FontAwesome.delete_left_solid, size: 25, color: purpleColor),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
+                                separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 20),
+                                itemCount: _banks.length,
                               ),
                       );
                     } else if (snapshot.connectionState == ConnectionState.waiting) {

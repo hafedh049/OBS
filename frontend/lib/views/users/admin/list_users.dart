@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
@@ -28,7 +29,12 @@ class _UsersListState extends State<UsersList> {
 
   Future<List<UserModel>> _loadUsers() async {
     try {
-      return <UserModel>[];
+      final Response response = await Dio().get("$ip/getAllUsers");
+      final List<UserModel> users = <UserModel>[];
+      for (final e in response.data["data"]) {
+        users.add(UserModel.fromJson(e));
+      }
+      return users;
     } catch (e) {
       return Future.error(e);
     }
@@ -64,7 +70,7 @@ class _UsersListState extends State<UsersList> {
                     builder: (BuildContext context) => AlertDialog(
                       backgroundColor: scaffoldColor,
                       contentPadding: const EdgeInsets.all(16),
-                      content: AddUser(users: _users, callback: () => _usersKey.currentState!.setState(() {})),
+                      content: SizedBox(width: MediaQuery.sizeOf(context).width * .7, child: AddUser(users: _users, callback: () => _usersKey.currentState!.setState(() {}))),
                     ),
                   ),
                 ),
@@ -106,84 +112,86 @@ class _UsersListState extends State<UsersList> {
                                   Text("No users yet.", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
                                 ],
                               )
-                            : SingleChildScrollView(
-                                child: Wrap(
-                                  alignment: WrapAlignment.center,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  runAlignment: WrapAlignment.center,
-                                  runSpacing: 20,
-                                  spacing: 20,
-                                  children: <Widget>[
-                                    for (final UserModel item in _users)
-                                      InkWell(
-                                        splashColor: transparentColor,
-                                        hoverColor: transparentColor,
-                                        highlightColor: transparentColor,
-                                        onTap: () {},
-                                        child: Container(
-                                          width: 300,
-                                          padding: const EdgeInsets.all(16),
-                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: darkColor),
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: <Widget>[
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: <Widget>[
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Text("User ID", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
-                                                      const SizedBox(width: 10),
-                                                      Text(item.userName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
-                                                    ],
+                            : ListView.separated(
+                                itemBuilder: (BuildContext context, int index) => InkWell(
+                                  splashColor: transparentColor,
+                                  hoverColor: transparentColor,
+                                  highlightColor: transparentColor,
+                                  onTap: () {},
+                                  child: Container(
+                                    width: 300,
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: darkColor),
+                                    child: Stack(
+                                      alignment: Alignment.topRight,
+                                      children: <Widget>[
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: <Widget>[
+                                            Row(
+                                              children: <Widget>[
+                                                Text("User ID", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                const SizedBox(width: 10),
+                                                Text(_users[index].userName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              children: <Widget>[
+                                                Text("Username", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                const SizedBox(width: 10),
+                                                Text(_users[index].userEmail, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              children: <Widget>[
+                                                Text("E-mail", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                const SizedBox(width: 10),
+                                                Text(_users[index].userName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              children: <Widget>[
+                                                Text("Role", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                const SizedBox(width: 10),
+                                                Container(
+                                                  padding: const EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(5),
+                                                    color: _users[index].userRole == "ADMIN"
+                                                        ? greenColor
+                                                        : _users[index].userRole == "AGENT"
+                                                            ? redColor
+                                                            : blueColor,
                                                   ),
-                                                  const SizedBox(height: 10),
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Text("Username", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
-                                                      const SizedBox(width: 10),
-                                                      Text(item.userEmail, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Text("E-mail", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
-                                                      const SizedBox(width: 10),
-                                                      Text(item.userName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  Row(
-                                                    children: <Widget>[
-                                                      Text("Role", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
-                                                      const SizedBox(width: 10),
-                                                      Container(
-                                                        padding: const EdgeInsets.all(8),
-                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: greenColor),
-                                                        child: Text(item.userEmail, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                              IconButton(
-                                                onPressed: () => showDialog(
-                                                  context: context,
-                                                  builder: (BuildContext context) => AlertDialog(
-                                                    backgroundColor: scaffoldColor,
-                                                    content: DeleteUser(userID: item.userID, users: _users, callback: () => _usersKey.currentState!.setState(() {})),
-                                                  ),
+                                                  child: Text(_users[index].userRole, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
                                                 ),
-                                                icon: const Icon(FontAwesome.delete_left_solid, size: 25, color: purpleColor),
-                                              ),
-                                            ],
-                                          ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                  ],
+                                        IconButton(
+                                          onPressed: () => showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) => AlertDialog(
+                                              backgroundColor: scaffoldColor,
+                                              content: SizedBox(
+                                                width: MediaQuery.sizeOf(context).width * .7,
+                                                child: DeleteUser(userID: _users[index].userID, users: _users, callback: () => _usersKey.currentState!.setState(() {})),
+                                              ),
+                                            ),
+                                          ),
+                                          icon: const Icon(FontAwesome.delete_left_solid, size: 25, color: purpleColor),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
+                                separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 20),
+                                itemCount: _users.length,
                               ),
                       );
                     } else if (snapshot.connectionState == ConnectionState.waiting) {

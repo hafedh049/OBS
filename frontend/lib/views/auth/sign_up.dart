@@ -1,15 +1,19 @@
 import 'package:animated_loading_border/animated_loading_border.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:frontend/utils/helpers/password_strength.dart';
 import 'package:frontend/utils/shared.dart';
-import 'package:frontend/views/home.dart';
+import 'package:frontend/views/users/client/holder.dart';
+import 'package:frontend/views/users/admin/holder.dart';
+import 'package:frontend/views/users/agent/holder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 
+import '../../models/user_model.dart';
 import '../../utils/callbacks.dart';
 
 class SignUp extends StatefulWidget {
@@ -50,9 +54,42 @@ class _SignUpState extends State<SignUp> {
     } else {
       _cardKey.currentState!.setState(() => _submitButtonState = true);
       try {
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const Home()), (Route route) => false);
+        final Response response = await Dio().post(
+          "$ip/createUser",
+          data: <String, dynamic>{
+            "username": _usernameController.text,
+            "password": _passwordController.text,
+            "email": _emailController.text,
+            "role": _selectedRole.toUpperCase(),
+          },
+        );
+        if (response.data["data"] == "Signed up successfully!") {
+          user = UserModel(
+            userEmail: _emailController.text,
+            userID: "",
+            userPassword: _passwordController.text,
+            userName: _usernameController.text,
+            userRole: _selectedRole.toUpperCase(),
+          );
+          Navigator.pushAndRemoveUntil(
+            // ignore: use_build_context_synchronously
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => user!.userRole == "ADMIN"
+                    ? const AdminHolder()
+                    : user!.userRole == "AGENT"
+                        ? const AgentHolder()
+                        : const ClientHolder()),
+            (Route route) => false,
+          );
+        } else {
+          _cardKey.currentState!.setState(() => _submitButtonState = false);
+          // ignore: use_build_context_synchronously
+          showToast(context, response.data["data"], redColor);
+        }
       } catch (e) {
         _cardKey.currentState!.setState(() => _submitButtonState = false);
+        // ignore: use_build_context_synchronously
         showToast(context, e.toString(), redColor);
       }
     }

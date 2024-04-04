@@ -5,23 +5,25 @@ import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-import '../../utils/shared.dart';
+import '../../../../../utils/shared.dart';
 
-class Disposit2Account extends StatefulWidget {
-  const Disposit2Account({super.key});
+class SavingsForm extends StatefulWidget {
+  const SavingsForm({super.key});
 
   @override
-  State<Disposit2Account> createState() => _Disposit2AccountState();
+  State<SavingsForm> createState() => _SavingsFormState();
 }
 
-class _Disposit2AccountState extends State<Disposit2Account> {
-  final TextEditingController _accountNumberController = TextEditingController();
+class _SavingsFormState extends State<SavingsForm> {
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _balanceController = TextEditingController();
+  final TextEditingController _maximumWithDrawLimitController = TextEditingController();
 
   @override
   void dispose() {
-    _accountNumberController.dispose();
+    _nameController.dispose();
     _balanceController.dispose();
+    _maximumWithDrawLimitController.dispose();
     super.dispose();
   }
 
@@ -37,7 +39,7 @@ class _Disposit2AccountState extends State<Disposit2Account> {
             Row(
               children: <Widget>[
                 IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(FontAwesome.chevron_left_solid, size: 15, color: whiteColor)),
-                Text("Disposit to account", style: GoogleFonts.itim(fontSize: 25, fontWeight: FontWeight.w500, color: whiteColor)),
+                Text("Create savings account", style: GoogleFonts.itim(fontSize: 25, fontWeight: FontWeight.w500, color: whiteColor)),
               ],
             ),
             Container(
@@ -61,11 +63,11 @@ class _Disposit2AccountState extends State<Disposit2Account> {
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: scaffoldColor),
                         child: TextField(
                           style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
-                          controller: _accountNumberController,
+                          controller: _nameController,
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.all(16),
                             border: InputBorder.none,
-                            hintText: "Account number",
+                            hintText: "Account name",
                             hintStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
                           ),
                         ),
@@ -80,6 +82,21 @@ class _Disposit2AccountState extends State<Disposit2Account> {
                             contentPadding: const EdgeInsets.all(16),
                             border: InputBorder.none,
                             hintText: "Balance",
+                            hintStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
+                          ),
+                          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r"[\d\.]"))],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: scaffoldColor),
+                        child: TextField(
+                          style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
+                          controller: _maximumWithDrawLimitController,
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.all(16),
+                            border: InputBorder.none,
+                            hintText: "Maximum withdraw limit",
                             hintStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
                           ),
                           inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r"[\d\.]"))],

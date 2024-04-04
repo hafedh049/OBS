@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
@@ -27,15 +30,15 @@ class _AddBankState extends State<AddBank> {
     } else if (_bankAddressController.text.trim().isEmpty) {
       showToast(context, "Enter a valid bank address", redColor);
     } else {
-      String bankID = const UuidV8().generate();
-
-      final Map<String, dynamic> storeItem = <String, dynamic>{
-        'bankID': bankID,
-        'bankName': _bankNameController.text.trim(),
-        'bankAddress': _bankAddressController.text.trim(),
+      final Map<String, dynamic> bankItem = <String, dynamic>{
+        "bankid": const UuidV8().generate(),
+        'bankname': _bankNameController.text.trim(),
+        'bankaddress': _bankAddressController.text.trim(),
       };
 
-      widget.banks.add(BankModel.fromJson(storeItem));
+      await Dio().post("$ip/addBank", data: bankItem);
+
+      widget.banks.add(BankModel.fromJson(bankItem));
       widget.callback();
       showToast(context, "Bank added successfully", greenColor);
       Navigator.pop(context);

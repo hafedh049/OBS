@@ -1,19 +1,19 @@
 package GUI;
 
-import java.sql.ResultSet;
-
 import com.mysql.cj.xdevapi.DbDoc;
 import com.mysql.cj.xdevapi.JsonParser;
 
-import Database.DatabaseHelper;
-
 import java.io.IOException;
 import com.sun.net.httpserver.HttpHandler;
+
+import Bank.Bank;
+import User.Admin;
+
 import com.sun.net.httpserver.HttpExchange;
 import java.io.OutputStream;
 import java.io.InputStream;
 
-public class ForgetPassword implements HttpHandler {
+public class AddBank implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -29,16 +29,7 @@ public class ForgetPassword implements HttpHandler {
         String response = "";
 
         try {
-            final ResultSet resultSet = DatabaseHelper.statement
-                    .executeQuery("SELECT * FROM USERS WHERE EMAIL = " + json.get("email") + ";");
-            if (resultSet.next()) {
-                DatabaseHelper.statement
-                        .execute("UPDATE USERS SET PASSWORD = " + json.get("password") + " WHERE EMAIL = "
-                                + json.get("email") + ";");
-                response = "{\"data\":\"Password changed successfully\"}";
-            } else {
-                response = "{\"data\":\"E-mail not found\"}";
-            }
+            Admin.addBank(new Bank(json));
         } catch (Exception e) {
             System.out.println(e);
             response = "{\"data\":\"%s\"}".formatted(e.toString());
@@ -50,4 +41,5 @@ public class ForgetPassword implements HttpHandler {
 
         responseBody.close();
     }
+
 }

@@ -3,20 +3,21 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:frontend/utils/helpers/screen_container.dart';
 import 'package:frontend/utils/shared.dart';
-import 'package:frontend/views/accounts/accounts_list.dart';
-import 'package:frontend/views/accounts/add_account.dart';
-import 'package:frontend/views/accounts/disposit_account.dart';
-import 'package:frontend/views/accounts/withdraw_account.dart';
+import 'package:frontend/views/auth/sign_in.dart';
+import 'package:frontend/views/users/client/accounts/accounts_list.dart';
+import 'package:frontend/views/users/client/accounts/add_account.dart';
+import 'package:frontend/views/users/client/accounts/disposit_account.dart';
+import 'package:frontend/views/users/client/accounts/withdraw_account.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class ClientHolder extends StatefulWidget {
+  const ClientHolder({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<ClientHolder> createState() => _ClientHolderState();
 }
 
-class _HomeState extends State<Home> {
+class _ClientHolderState extends State<ClientHolder> {
   final List<Map<String, dynamic>> _screens = <Map<String, dynamic>>[
     <String, dynamic>{
       "title": "ADD ACCOUNT",
@@ -59,7 +60,7 @@ class _HomeState extends State<Home> {
                   backgroundColor: purpleColor,
                   transitionType: TransitionType.TOP_TO_BOTTOM,
                   textStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
-                  onPress: () => Navigator.pop(context),
+                  onPress: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const SignIn())),
                 ),
               ],
             ),

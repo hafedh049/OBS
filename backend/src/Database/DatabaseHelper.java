@@ -21,8 +21,6 @@ public class DatabaseHelper {
                                 "    BANKID VARCHAR(50),\r\n" +
                                 "    BANKNAME VARCHAR(100),\r\n" +
                                 "    BANKADDRESS VARCHAR(255),\r\n" +
-                                "    BANKBRANCHES INT,\r\n" +
-                                "    BANKCUSTOMERS INT,\r\n" +
                                 "    PRIMARY KEY (BANKID, BANKNAME, BANKADDRESS)\r\n" +
                                 ");");
                 statement.execute("CREATE TABLE IF NOT EXISTS USERS (\r\n" +
