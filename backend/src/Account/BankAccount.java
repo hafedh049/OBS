@@ -2,6 +2,8 @@ package Account;
 
 import java.util.UUID;
 
+import com.mysql.cj.xdevapi.DbDoc;
+
 public class BankAccount {
 	protected String accountBankID;
 	protected String accountHolderID;
@@ -9,7 +11,7 @@ public class BankAccount {
 	protected String accountNumber;
 	protected double balance;
 	protected String accountType;
-	protected boolean isActive;
+	protected String isActive;
 
 	public void setAccountBankID(String accountBankID) {
 		this.accountBankID = accountBankID;
@@ -35,7 +37,7 @@ public class BankAccount {
 		this.accountType = accountType;
 	}
 
-	public void setActive(boolean isActive) {
+	public void setActive(String isActive) {
 		this.isActive = isActive;
 	}
 
@@ -63,18 +65,18 @@ public class BankAccount {
 		return accountType;
 	}
 
-	public boolean getIsActive() {
+	public String getIsActive() {
 		return isActive;
 	}
 
-	public BankAccount(String accountHolderName, double balance, String accountType, String accountBankID,
-			String accountHolderID,
-			boolean isActive) {
+	public BankAccount(DbDoc json) {
+		this.accountBankID = json.get("bankid").toString().replaceAll("\"", "");
 		this.accountNumber = UUID.randomUUID().toString();
-		this.accountHolderName = accountHolderName;
-		this.balance = balance;
-		this.accountType = accountType;
-		this.isActive = isActive;
+		this.accountHolderName = json.get("username").toString().replaceAll("\"", "");
+		this.accountHolderID = json.get("userid").toString().replaceAll("\"", "");
+		this.balance = Double.parseDouble(json.get("balance").toString());
+		this.accountType = json.get("type").toString().replaceAll("\"", "");
+		this.isActive = json.get("isactive").toString();
 	}
 
 }

@@ -11,10 +11,10 @@ public class Client extends User {
                 super(json);
         }
 
-        public void addAccount(CurrentAccount account) throws Exception {
+        final public static void addAccount(CurrentAccount account) throws Exception {
                 DatabaseHelper.statement
                                 .execute(String.format(
-                                                "INSERT INTO ACCOUNTS VALUES('%s','%s','%s','%s','%.2f','%s','%b','%.2f','%d','%.2f','%.2f','%d',);",
+                                                "INSERT INTO ACCOUNTS VALUES('%s','%s','%s','%s','%.2f','%s','%s','%.2f','%.2',NULL,NULL,NULL);",
                                                 account.getAccountBankID(),
                                                 account.getAccountHolderID(),
                                                 account.getAccountNumber(),
@@ -23,34 +23,29 @@ public class Client extends User {
                                                 account.getAccountType(),
                                                 account.getIsActive(),
                                                 account.getOverdraftLimit(),
-                                                account.getMaxTransLimit(),
-                                                null,
-                                                null,
-                                                null));
+                                                account.getMaxTransLimit()));
         }
 
-        public void updateAccount(CurrentAccount account) throws Exception {
+        final public static void updateAccount(CurrentAccount account) throws Exception {
                 DatabaseHelper.statement
                                 .execute(String.format("UPDATE ACCOUNTS SET" +
                                                 "ACCOUNTHOLDERNAME='%s'," +
                                                 "BALANCE='%.2f'," +
                                                 "ACCOUNTTYPE='%s'," +
-                                                "ISACTIVE='%b'," +
+                                                "ISACTIVE='%s'," +
                                                 "OVERDRAFTLIMIT='%.2f'," +
-                                                "MAXTRANSLIMIT='%d'," +
-                                                "INTERESTRATE='%.2f'," +
-                                                "MINIMUMBALANCE='%.2f'," +
-                                                "WITHDRAWLIMIT WHERE ACCOUNTNUMBER = %s;",
+                                                "MAXTRANSLIMIT='%.2f'," +
+                                                "WHERE ACCOUNTNUMBER = %s;",
                                                 account.getAccountHolderName(), account.getBalance(),
                                                 account.getAccountType(), account.getIsActive(),
                                                 account.getOverdraftLimit(),
-                                                account.getMaxTransLimit(), null, null, null));
+                                                account.getMaxTransLimit()));
         }
 
-        public void addAccount(SavingsAccount account) throws Exception {
+        final public static void addAccount(SavingsAccount account) throws Exception {
                 DatabaseHelper.statement
                                 .execute(String.format(
-                                                "INSERT INTO ACCOUNTS VALUES('%s','%s','%s','%s','%.2f','%s','%b','%.2f','%d','%.2f','%.2f','%d',);",
+                                                "INSERT INTO ACCOUNTS VALUES('%s','%s','%s','%s','%.2f','%s','%s',NULL,NULL,'%.2f','%.2f','%.2f');",
                                                 account.getAccountBankID(),
                                                 account.getAccountHolderID(),
                                                 account.getAccountNumber(),
@@ -58,36 +53,32 @@ public class Client extends User {
                                                 account.getBalance(),
                                                 account.getAccountType(),
                                                 account.getIsActive(),
-                                                null,
-                                                null,
                                                 account.getInterestRate(),
                                                 account.getMinimumBalance(),
                                                 account.getWithdrawalLimit()));
         }
 
-        public void updateAccount(SavingsAccount account) throws Exception {
+        final public void updateAccount(SavingsAccount account) throws Exception {
                 DatabaseHelper.statement
                                 .execute(String.format("UPDATE ACCOUNTS SET" +
                                                 "ACCOUNTHOLDERNAME='%s'," +
                                                 "BALANCE='%.2f'," +
                                                 "ACCOUNTTYPE='%s'," +
-                                                "ISACTIVE='%b'," +
-                                                "OVERDRAFTLIMIT='%.2f'," +
-                                                "MAXTRANSLIMIT='%d'," +
+                                                "ISACTIVE='%s'," +
                                                 "INTERESTRATE='%.2f'," +
                                                 "MINIMUMBALANCE='%.2f'," +
-                                                "WITHDRAWLIMIT WHERE ACCOUNTNUMBER = %s;",
+                                                "WITHDRAWLIMIT = %.2f WHERE ACCOUNTNUMBER = %s;",
                                                 account.getAccountHolderName(), account.getBalance(),
-                                                account.getAccountType(), account.getIsActive(), null,
-                                                null, account.getInterestRate(),
+                                                account.getAccountType(), account.getIsActive(),
+                                                account.getInterestRate(),
                                                 account.getMinimumBalance(),
                                                 account.getWithdrawalLimit()));
         }
 
-        public void removeAccount(String accountID) throws Exception {
+        final public void removeAccount(String accountID) throws Exception {
                 DatabaseHelper.statement
                                 .execute(String.format(
-                                                "DELETE FROM BANKACCOUNTS WHERE ACCOUNTNUMBER = '%s';", accountID));
+                                                "DELETE FROM ACCOUNTS WHERE ACCOUNTNUMBER = '%s';", accountID));
         }
 
 }

@@ -8,13 +8,18 @@ public class Transaction {
     private String transactionID;
     private String from;
     private String to;
+    private String currencyFrom;
+    private String currencyTo;
+
     private double amount;
     private Date transactionDate;
     private String description;
     private String transactionState;
 
     public Transaction(String from, String to, double amount, Date transactionDate,
-            String description, String transaction) {
+            String description, String transaction, String currencyFrom, String currencyTo) {
+        this.currencyFrom = currencyFrom;
+        this.currencyTo = currencyTo;
         this.transactionID = UUID.randomUUID().toString();
         this.from = from;
         this.to = to;
@@ -22,6 +27,22 @@ public class Transaction {
         this.transactionDate = transactionDate;
         this.description = description;
         this.transactionState = transaction;
+    }
+
+    public String getCurrencyFrom() {
+        return currencyFrom;
+    }
+
+    public void setCurrencyFrom(String currencyFrom) {
+        this.currencyFrom = currencyFrom;
+    }
+
+    public String getCurrencyTo() {
+        return currencyTo;
+    }
+
+    public void setCurrencyTo(String currencyTo) {
+        this.currencyTo = currencyTo;
     }
 
     public String getTransactionState() {
@@ -73,12 +94,13 @@ public class Transaction {
     }
 
     public void makeTransaction() throws Exception {
-        DatabaseHelper.statement.execute(String.format("INSERT INTO TRANSACTIONS VALUES('%s','%s','%s',%.2f,%tF,'%s');",
-                transactionID, from, to, amount, transactionDate, description));
+        DatabaseHelper.statement
+                .execute(String.format("INSERT INTO TRANSACTIONS VALUES('%s','%s','%s','%s','%s',%.2f,%tF,'%s');",
+                        transactionID, from, to, currencyFrom, currencyTo, amount, transactionDate, description));
     }
 
     public void deleteTransaction() throws Exception {
         DatabaseHelper.statement
-                .execute(String.format("DELETE FROM TRANSACTIONS WHERE TRANSACTIONID = %s;", transactionID));
+                .execute(String.format("DELETE FROM TRANSACTIONS WHERE TRANSACTIONID = '%s';", transactionID));
     }
 }

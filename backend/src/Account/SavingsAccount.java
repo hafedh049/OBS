@@ -1,9 +1,11 @@
 package Account;
 
+import com.mysql.cj.xdevapi.DbDoc;
+
 public class SavingsAccount extends BankAccount {
 	private double interestRate;
 	private double minimumBalance;
-	private int withdrawalLimit;
+	private double withdrawalLimit;
 
 	public double getInterestRate() {
 		return interestRate;
@@ -21,7 +23,7 @@ public class SavingsAccount extends BankAccount {
 		this.minimumBalance = minimumBalance;
 	}
 
-	public int getWithdrawalLimit() {
+	public double getWithdrawalLimit() {
 		return withdrawalLimit;
 	}
 
@@ -29,14 +31,11 @@ public class SavingsAccount extends BankAccount {
 		this.withdrawalLimit = withdrawalLimit;
 	}
 
-	public SavingsAccount(String accountHolderName, double balance, String accountBankID,
-			String accountHolderID,
-			boolean isActive, double maxWithLimit, double interestRate, double minimumBalance, int withdrawalLimit) {
-		super(accountHolderName, balance, "SAVINGS", accountBankID,
-				accountHolderID, isActive);
-		this.interestRate = interestRate;
-		this.minimumBalance = minimumBalance;
-		this.withdrawalLimit = withdrawalLimit;
+	public SavingsAccount(DbDoc json) {
+		super(json);
+		this.interestRate = Double.parseDouble(json.get("interestrate").toString());
+		this.minimumBalance = Double.parseDouble(json.get("minimumbalance").toString());
+		this.withdrawalLimit = Double.parseDouble(json.get("withdrawlimit").toString());
 	}
 
 }

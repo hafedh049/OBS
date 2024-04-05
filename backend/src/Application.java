@@ -1,5 +1,6 @@
 
 import Database.DatabaseHelper;
+import GUI.AddAccount;
 import GUI.AddBank;
 import GUI.AddUser;
 import GUI.DeleteBank;
@@ -32,6 +33,7 @@ public class Application {
 			server.createContext("/updateUser", new UpdateUser());
 			server.createContext("/deleteUser", new DeleteUser());
 			server.createContext("/getAllUsers", new GetAllUsers());
+			server.createContext("/addAccount", new AddAccount());
 			server.start();
 			System.out.println("Server is running on port 8000");
 		} catch (Exception e) {

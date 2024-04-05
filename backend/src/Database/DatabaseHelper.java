@@ -36,6 +36,8 @@ public class DatabaseHelper {
                                 "TRANSACTIONID VARCHAR(255) PRIMARY KEY,\r\n" +
                                 "SENDERID VARCHAR(255),\r\n" +
                                 "RECEIVERID VARCHAR(255),\r\n" +
+                                "CURRENCYFROM VARCHAR(255),\r\n" +
+                                "CURRENCYTO VARCHAR(255),\r\n" +
                                 "AMOUNT DOUBLE,\r\n" +
                                 "TIMESTAMP DATE,\r\n" +
                                 "DESCRIPTION TEXT\r\n" +
@@ -48,7 +50,7 @@ public class DatabaseHelper {
                                 "ACCOUNTHOLDERNAME VARCHAR(255), " +
                                 "BALANCE DOUBLE, " +
                                 "ACCOUNTTYPE VARCHAR(255), " +
-                                "ISACTIVE BOOLEAN, " +
+                                "ISACTIVE VARCHAR(255), " +
                                 "OVERDRAFTLIMIT DOUBLE, " +
                                 "MAXTRANSLIMIT DOUBLE, " +
                                 "INTERESTRATE DOUBLE, " +

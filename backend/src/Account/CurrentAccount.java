@@ -1,8 +1,10 @@
 package Account;
 
+import com.mysql.cj.xdevapi.DbDoc;
+
 public class CurrentAccount extends BankAccount {
 	private double overdraftLimit;
-	private int maxTransLimit;
+	private double maxTransLimit;
 
 	public double getOverdraftLimit() {
 		return overdraftLimit;
@@ -12,21 +14,18 @@ public class CurrentAccount extends BankAccount {
 		this.overdraftLimit = overdraftLimit;
 	}
 
-	public int getMaxTransLimit() {
+	public double getMaxTransLimit() {
 		return maxTransLimit;
 	}
 
-	public void setMaxTransLimit(int maxTransLimit) {
+	public void setMaxTransLimit(double maxTransLimit) {
 		this.maxTransLimit = maxTransLimit;
 	}
 
-	public CurrentAccount(String accountHolderName, double balance,
-			String openedDate, boolean isActive, String tradeLicenseNumber, String accountBankID,
-			String accountHolderID, double overdraftLimit, int maxTransLimit) throws Exception {
-		super(accountHolderName, balance, "CURRENT", accountBankID,
-				accountHolderID, isActive);
-		this.overdraftLimit = overdraftLimit;
-		this.maxTransLimit = maxTransLimit;
+	public CurrentAccount(DbDoc json) {
+		super(json);
+		this.overdraftLimit = Double.parseDouble(json.get("overdraftlimit").toString());
+		this.maxTransLimit = Double.parseDouble(json.get("maxtranslimit").toString());
 	}
 
 }
