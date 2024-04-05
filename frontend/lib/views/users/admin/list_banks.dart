@@ -14,6 +14,7 @@ import '../../../utils/callbacks.dart';
 import '../../../utils/helpers/errored.dart';
 import '../../../utils/helpers/loading.dart';
 import '../../../utils/shared.dart';
+import 'edit_bank.dart';
 
 class BanksList extends StatefulWidget {
   const BanksList({super.key});
@@ -97,87 +98,97 @@ class _BanksListState extends State<BanksList> {
             Container(width: MediaQuery.sizeOf(context).width, height: .3, color: greyColor, margin: const EdgeInsets.symmetric(vertical: 20)),
             Expanded(
               child: Center(
-                child: FutureBuilder<List<BankModel>>(
-                  future: _loadBanks(),
-                  builder: (BuildContext context, AsyncSnapshot<List<BankModel>> snapshot) {
-                    if (snapshot.hasData) {
-                      _banks = snapshot.data!;
-                      return StatefulBuilder(
-                        key: _banksKey,
-                        builder: (BuildContext context, void Function(void Function()) setS) => _banks.isEmpty
-                            ? Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  LottieBuilder.asset("assets/lotties/empty.json", reverse: true),
-                                  Text("No banks yet.", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
-                                ],
-                              )
-                            : ListView.separated(
-                                itemBuilder: (BuildContext context, int index) => InkWell(
-                                  splashColor: transparentColor,
-                                  hoverColor: transparentColor,
-                                  highlightColor: transparentColor,
-                                  onTap: () {},
-                                  child: Container(
-                                    padding: const EdgeInsets.all(16),
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: darkColor),
-                                    child: Stack(
-                                      alignment: Alignment.topRight,
-                                      children: <Widget>[
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: <Widget>[
-                                            Row(
-                                              children: <Widget>[
-                                                Text("Bank ID", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
-                                                const SizedBox(width: 10),
-                                                Text(_banks[index].bankID, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 10),
-                                            Row(
-                                              children: <Widget>[
-                                                Text("Bank name", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
-                                                const SizedBox(width: 10),
-                                                Text(_banks[index].bankName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 10),
-                                            Row(
-                                              children: <Widget>[
-                                                Text("Bank address", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
-                                                const SizedBox(width: 10),
-                                                Text(_banks[index].bankAddress, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
-                                              ],
-                                            ),
-                                          ],
+                child: StatefulBuilder(
+                  key: _banksKey,
+                  builder: (BuildContext context, void Function(void Function()) setS) {
+                    return FutureBuilder<List<BankModel>>(
+                      future: _loadBanks(),
+                      builder: (BuildContext context, AsyncSnapshot<List<BankModel>> snapshot) {
+                        if (snapshot.hasData) {
+                          _banks = snapshot.data!;
+                          return _banks.isEmpty
+                              ? Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    LottieBuilder.asset("assets/lotties/empty.json", reverse: true),
+                                    Text("No banks yet.", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                  ],
+                                )
+                              : ListView.separated(
+                                  itemBuilder: (BuildContext context, int index) => InkWell(
+                                    splashColor: transparentColor,
+                                    hoverColor: transparentColor,
+                                    highlightColor: transparentColor,
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) => EditBank(
+                                          bank: _banks[index],
+                                          callback: () => _banksKey.currentState!.setState(() {}),
                                         ),
-                                        IconButton(
-                                          onPressed: () => showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) => AlertDialog(
-                                              backgroundColor: scaffoldColor,
-                                              content: SizedBox(
-                                                width: MediaQuery.sizeOf(context).width * .7,
-                                                child: DeleteBank(bankID: _banks[index].bankID, banks: _banks, callback: () => _banksKey.currentState!.setState(() {})),
+                                      ),
+                                    ),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(16),
+                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: darkColor),
+                                      child: Stack(
+                                        alignment: Alignment.topRight,
+                                        children: <Widget>[
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Row(
+                                                children: <Widget>[
+                                                  Text("Bank ID", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                  const SizedBox(width: 10),
+                                                  Text(_banks[index].bankID, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 10),
+                                              Row(
+                                                children: <Widget>[
+                                                  Text("Bank name", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                  const SizedBox(width: 10),
+                                                  Text(_banks[index].bankName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: blueColor)),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 10),
+                                              Row(
+                                                children: <Widget>[
+                                                  Text("Bank address", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
+                                                  const SizedBox(width: 10),
+                                                  Text(_banks[index].bankAddress, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          IconButton(
+                                            onPressed: () => showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) => AlertDialog(
+                                                backgroundColor: scaffoldColor,
+                                                content: SizedBox(
+                                                  width: MediaQuery.sizeOf(context).width * .7,
+                                                  child: DeleteBank(bankID: _banks[index].bankID, banks: _banks, callback: () => _banksKey.currentState!.setState(() {})),
+                                                ),
                                               ),
                                             ),
+                                            icon: const Icon(FontAwesome.delete_left_solid, size: 25, color: purpleColor),
                                           ),
-                                          icon: const Icon(FontAwesome.delete_left_solid, size: 25, color: purpleColor),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 20),
-                                itemCount: _banks.length,
-                              ),
-                      );
-                    } else if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Loading();
-                    }
-                    return Errored(error: snapshot.error.toString());
+                                  separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 20),
+                                  itemCount: _banks.length,
+                                );
+                        } else if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Loading();
+                        }
+                        return Errored(error: snapshot.error.toString());
+                      },
+                    );
                   },
                 ),
               ),

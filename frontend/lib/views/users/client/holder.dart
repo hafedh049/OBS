@@ -73,8 +73,8 @@ class _ClientHolderState extends State<ClientHolder> {
             SizedBox(
               width: MediaQuery.sizeOf(context).width - 2 * 24,
               height: MediaQuery.sizeOf(context).height - 2 * 24 - 60,
-              child: SingleChildScrollView(
-                child: Center(
+              child: Center(
+                child: SingleChildScrollView(
                   child: Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     alignment: WrapAlignment.center,

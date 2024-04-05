@@ -52,12 +52,12 @@ class _AgentSideBarState extends State<AgentSideBar> {
       ),
       items: <SidebarXItem>[
         SidebarXItem(
-          iconWidget: Icon(FontAwesome.robot_solid, size: 25, color: agentIndex == 0 ? purpleColor : blueColor),
+          iconWidget: Icon(FontAwesome.paper_plane, size: 25, color: agentIndex == 0 ? purpleColor : blueColor),
           label: "Accounts List",
           onTap: () {
             agentIndex = 0;
             setState(() {});
-            adminPageController.jumpToPage(agentIndex);
+            agentPageController.jumpToPage(agentIndex);
           },
         ),
       ],

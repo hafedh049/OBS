@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:frontend/models/account_model.dart';
 import 'package:frontend/views/users/agent/list_transactions.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../utils/callbacks.dart';
 import '../../../utils/helpers/errored.dart';
 import '../../../utils/helpers/loading.dart';
 import '../../../utils/shared.dart';
+import '../../auth/sign_in.dart';
 
 class AccountsList extends StatefulWidget {
   const AccountsList({super.key});
@@ -37,7 +41,29 @@ class _AccountsListState extends State<AccountsList> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text("Accounts List", style: GoogleFonts.itim(fontSize: 22, fontWeight: FontWeight.w500, color: greyColor)),
+            Row(
+              children: <Widget>[
+                Text("Accounts List", style: GoogleFonts.itim(fontSize: 22, fontWeight: FontWeight.w500, color: greyColor)),
+                const Spacer(),
+                AnimatedButton(
+                  width: 100,
+                  height: 35,
+                  text: 'SIGN-OUT',
+                  selectedTextColor: darkColor,
+                  animatedOn: AnimatedOn.onHover,
+                  animationDuration: 500.ms,
+                  isReverse: true,
+                  selectedBackgroundColor: redColor,
+                  backgroundColor: purpleColor,
+                  transitionType: TransitionType.TOP_TO_BOTTOM,
+                  textStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
+                  onPress: () async {
+                    showToast(context, "Salamou alaykom", redColor);
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const SignIn()), (Route route) => false);
+                  },
+                ),
+              ],
+            ),
             Container(width: MediaQuery.sizeOf(context).width, height: .3, color: greyColor, margin: const EdgeInsets.symmetric(vertical: 20)),
             Expanded(
               child: Center(
@@ -61,7 +87,6 @@ class _AccountsListState extends State<AccountsList> {
                                   splashColor: transparentColor,
                                   hoverColor: transparentColor,
                                   highlightColor: transparentColor,
-                                  onLongPress: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TransactionsList(senderID: _accounts[index].accountHolderID))),
                                   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TransactionsList(senderID: _accounts[index].accountHolderID))),
                                   child: Container(
                                     width: 300,

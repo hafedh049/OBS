@@ -26,7 +26,7 @@ public class Admin extends User {
         public static void updateBank(Bank bank) throws Exception {
                 DatabaseHelper.statement
                                 .execute(String.format(
-                                                "UPDATE BANKS SET BANKNAME = '%s',BANKNAME = '%s' WHERE BANKID = %s;",
+                                                "UPDATE BANKS SET BANKNAME = '%s',BANKADDRESS = '%s' WHERE BANKID = '%s';",
                                                 bank.getBankName(), bank.getBankAddress(), bank.getBankID()));
         }
 
@@ -50,7 +50,7 @@ public class Admin extends User {
                 DatabaseHelper.statement
                                 .execute(
                                                 String.format(
-                                                                "UPDATE USERS SET USERNAME = '%s',EMAIL = '%s',PASSWORD = '%s' WHERE USERID = %s;",
+                                                                "UPDATE USERS SET USERNAME = '%s',EMAIL = '%s',PASSWORD = '%s' WHERE USERID = '%s';",
                                                                 client.username, client.email, client.password,
                                                                 client.userID));
 
@@ -66,7 +66,7 @@ public class Admin extends User {
 
         }
 
-        public static void deleteAgent(Agent agentID) throws Exception {
+        public static void deleteAgent(String agentID) throws Exception {
                 DatabaseHelper.statement.execute(String.format("DELETE FROM USERS WHERE USERID = '%s';", agentID));
 
         }
@@ -75,7 +75,7 @@ public class Admin extends User {
                 DatabaseHelper.statement
                                 .execute(
                                                 String.format(
-                                                                "UPDATE USERS SET USERNAME = '%s',EMAIL = '%s',PASSWORD = '%s' WHERE USERID = %s;",
+                                                                "UPDATE USERS SET USERNAME = '%s',EMAIL = '%s',PASSWORD = '%s' WHERE USERID = '%s';",
                                                                 agent.username, agent.email, agent.password,
                                                                 agent.userID));
 

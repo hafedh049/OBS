@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
@@ -18,14 +21,20 @@ class DeleteUser extends StatefulWidget {
 }
 
 class _DeleteUserState extends State<DeleteUser> {
-  final String _passphrase = "admin";
   bool _passphraseState = false;
   final TextEditingController _confirmController = TextEditingController();
 
   void _validate() async {
-    if (_confirmController.text != _passphrase) {
+    if (_confirmController.text != user!.userPassword) {
       showToast(context, "Enter the confirmation passphrase", redColor);
     } else {
+      await Dio().post(
+        "$ip/deleteUser",
+        data: <String, dynamic>{
+          "userid": widget.userID,
+          "role": widget.users.firstWhere((UserModel element) => element.userID == widget.userID).userRole,
+        },
+      );
       widget.users.removeWhere((UserModel element) => element.userID == widget.userID);
       widget.callback();
       showToast(context, "User deleted", greenColor);

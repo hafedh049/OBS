@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/views/users/admin/list_banks.dart';
 import 'package:frontend/views/users/admin/list_users.dart';
-import 'package:frontend/views/users/client/accounts/accounts_list.dart';
 import 'package:sidebarx/sidebarx.dart';
+
+import '../views/users/agent/list_accounts.dart';
 
 const Color scaffoldColor = Color.fromARGB(255, 32, 35, 38);
 const Color purpleColor = Color.fromARGB(255, 124, 120, 239);

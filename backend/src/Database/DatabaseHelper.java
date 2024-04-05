@@ -50,10 +50,10 @@ public class DatabaseHelper {
                                 "ACCOUNTTYPE VARCHAR(255), " +
                                 "ISACTIVE BOOLEAN, " +
                                 "OVERDRAFTLIMIT DOUBLE, " +
-                                "MAXTRANSLIMIT INT, " +
+                                "MAXTRANSLIMIT DOUBLE, " +
                                 "INTERESTRATE DOUBLE, " +
                                 "MINIMUMBALANCE DOUBLE, " +
-                                "WITHDRAWLIMIT INT" +
+                                "WITHDRAWLIMIT DOUBLE" +
                                 ");");
         }
 }
