@@ -45,14 +45,14 @@ class _EditAccountState extends State<EditAccount> {
     _isActiveController.text = widget.account.isActive ? "ACTIVE" : "DISABLED";
 
     if (widget.account.accountType == "CURRENT") {
-      _overdraftLimitController.text = widget.account.overdraftLimit.toStringAsFixed(2);
+      _overdraftLimitController.text = widget.account.overdraftLimit!.toStringAsFixed(2);
       _maxTransLimitController.text = widget.account.maxTransLimit.toString();
     }
 
     if (widget.account.accountType == "SAVINGS") {
-      _interestRateController.text = widget.account.interestRate.toStringAsFixed(2);
-      _minimumBalanceController.text = widget.account.minimumBalance.toStringAsFixed(2);
-      _withdrawLimitController.text = widget.account.withdrawLimit.toStringAsFixed(2);
+      _interestRateController.text = widget.account.interestRate!.toStringAsFixed(2);
+      _minimumBalanceController.text = widget.account.minimumBalance!.toStringAsFixed(2);
+      _withdrawLimitController.text = widget.account.withdrawLimit!.toStringAsFixed(2);
     }
 
     super.initState();

@@ -6,11 +6,11 @@ class AccountModel {
   final double balance;
   final String accountType;
   final bool isActive;
-  final double overdraftLimit;
-  final int maxTransLimit;
-  final double interestRate;
-  final double minimumBalance;
-  final int withdrawLimit;
+  final double? overdraftLimit;
+  final double? maxTransLimit;
+  final double? interestRate;
+  final double? minimumBalance;
+  final double? withdrawLimit;
   final DateTime createdAt;
 
   AccountModel({

@@ -160,7 +160,7 @@ class _AccountsListState extends State<AccountsList> {
                                                 children: <Widget>[
                                                   Text("Overdraft limit", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
                                                   const SizedBox(width: 10),
-                                                  Text(_accounts[index].overdraftLimit.toStringAsFixed(2), style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
+                                                  Text(_accounts[index].overdraftLimit!.toStringAsFixed(2), style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
                                                 ],
                                               ),
                                               const SizedBox(height: 10),
@@ -178,7 +178,7 @@ class _AccountsListState extends State<AccountsList> {
                                                 children: <Widget>[
                                                   Text("Interest rate", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
                                                   const SizedBox(width: 10),
-                                                  Text(_accounts[index].interestRate.toStringAsFixed(2), style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
+                                                  Text(_accounts[index].interestRate!.toStringAsFixed(2), style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
                                                 ],
                                               ),
                                               const SizedBox(height: 10),
@@ -186,7 +186,7 @@ class _AccountsListState extends State<AccountsList> {
                                                 children: <Widget>[
                                                   Text("Minimum balance", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
                                                   const SizedBox(width: 10),
-                                                  Text(_accounts[index].minimumBalance.toStringAsFixed(2), style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
+                                                  Text(_accounts[index].minimumBalance!.toStringAsFixed(2), style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
                                                 ],
                                               ),
                                               const SizedBox(height: 10),

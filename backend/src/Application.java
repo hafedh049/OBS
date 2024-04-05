@@ -6,6 +6,7 @@ import GUI.AddUser;
 import GUI.DeleteBank;
 import GUI.DeleteUser;
 import GUI.ForgetPassword;
+import GUI.GetAllAccounts;
 import GUI.GetAllBanks;
 import GUI.GetAllUsers;
 import GUI.Login;
@@ -34,6 +35,7 @@ public class Application {
 			server.createContext("/deleteUser", new DeleteUser());
 			server.createContext("/getAllUsers", new GetAllUsers());
 			server.createContext("/addAccount", new AddAccount());
+			server.createContext("/getAllAccounts", new GetAllAccounts());
 			server.start();
 			System.out.println("Server is running on port 8000");
 		} catch (Exception e) {
