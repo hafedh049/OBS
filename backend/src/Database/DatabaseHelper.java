@@ -40,7 +40,8 @@ public class DatabaseHelper {
                                 "CURRENCYTO VARCHAR(255),\r\n" +
                                 "AMOUNT DOUBLE,\r\n" +
                                 "TIMESTAMP DATE,\r\n" +
-                                "DESCRIPTION TEXT\r\n" +
+                                "DESCRIPTION TEXT,\r\n" +
+                                "STATUS TEXT\r\n" +
                                 ");");
 
                 statement.execute("CREATE TABLE IF NOT EXISTS ACCOUNTS (" +

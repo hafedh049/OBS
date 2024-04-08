@@ -93,14 +93,8 @@ public class Transaction {
         this.description = description;
     }
 
-    public void makeTransaction() throws Exception {
-        DatabaseHelper.statement
-                .execute(String.format("INSERT INTO TRANSACTIONS VALUES('%s','%s','%s','%s','%s',%.2f,%tF,'%s');",
-                        transactionID, from, to, currencyFrom, currencyTo, amount, transactionDate, description));
-    }
-
-    public void deleteTransaction() throws Exception {
-        DatabaseHelper.statement
-                .execute(String.format("DELETE FROM TRANSACTIONS WHERE TRANSACTIONID = '%s';", transactionID));
+    public static void deposit(Transaction transaction) throws Exception {
+        DatabaseHelper.statement.execute("INSERT INTO TRANSACTIONS (TRANSACTIONID, SENDERID, RECEIVERID, CURRENCYFROM, CURRENCYTO, AMOUNT, TIMESTAMP, DESCRIPTION, STATUS) VALUES ('%s', '%s', '%s', '%s', '%s', %.2f, '%s', '%s', '%s');".formatted(transactionID, senderID, receiverID, currencyFrom, currencyTo, amount, timestamp, description, status);
+);
     }
 }
