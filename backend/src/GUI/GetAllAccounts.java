@@ -10,6 +10,16 @@ import java.io.OutputStream;
 import java.sql.ResultSet;
 
 public class GetAllAccounts implements HttpHandler {
+    public String replaceLast(String original, String searchString, String replacement) {
+        int lastIndex = original.lastIndexOf(searchString);
+        if (lastIndex == -1) {
+            // If the search string is not found, return the original string unchanged
+            return original;
+        }
+        String prefix = original.substring(0, lastIndex);
+        String suffix = original.substring(lastIndex + searchString.length());
+        return prefix + replacement + suffix;
+    }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -22,32 +32,34 @@ public class GetAllAccounts implements HttpHandler {
             final ResultSet resultSet = DatabaseHelper.statement.executeQuery("SELECT * FROM ACCOUNTS;");
             while (resultSet.next()) {
                 if (resultSet.getString("ACCOUNTTYPE").equals("CURRENT")) {
-                    response += "{\"accountbankid\":\"%s\",\"accountholderid\":\"%s\",\"accountholdername\":\"%s\",\"accountnumber\":\"%s\",\"balance\":%.2f,\"accounttype\":\"%s\",\"isactive\":\"%s\",\"overdraftlimit\":%.2f,\"maxtranslimit\":%.2f},"
+                    response += "{\"accountbankid\":\"%s\",\"accountholderid\":\"%s\",\"accountholdername\":\"%s\",\"accountnumber\":\"%s\",\"balance\":%.2f,\"accounttype\":\"%s\",\"isactive\":\"%s\",\"createdat\":\"%s\",\"overdraftlimit\":%.2f,\"maxtranslimit\":%.2f},"
                             .formatted(
                                     resultSet.getString("ACCOUNTBANKID"),
                                     resultSet.getString("ACCOUNTHOLDERID"),
                                     resultSet.getString("ACCOUNTHOLDERNAME"),
                                     resultSet.getString("ACCOUNTNUMBER"),
-                                    resultSet.getString("BALANCE"),
+                                    resultSet.getDouble("BALANCE"),
                                     resultSet.getString("ACCOUNTTYPE"),
                                     resultSet.getString("ISACTIVE"),
-                                    resultSet.getString("OVERDRAFTLIMIT"),
-                                    resultSet.getString("MAXTRANSLIMIT"));
+                                    resultSet.getDate("CREATEDAT").toString(),
+                                    resultSet.getDouble("OVERDRAFTLIMIT"),
+                                    resultSet.getDouble("MAXTRANSLIMIT"));
                 } else {
-                    response += "{\"accountbankid\":\"%s\",\"accountholderid\":\"%s\",\"accountholdername\":\"%s\",\"accountnumber\":\"%s\",\"balance\":%.2f,\"accounttype\":\"%s\",\"isactive\":\"%s\",\"interestrate\":%.2f,\"minimumbalance\":%.2f,\"withdrawallimit\":%.2f},"
+                    response += "{\"accountbankid\":\"%s\",\"accountholderid\":\"%s\",\"accountholdername\":\"%s\",\"accountnumber\":\"%s\",\"balance\":%.2f,\"accounttype\":\"%s\",\"isactive\":\"%s\",\"createdat\":\"%s\",\"interestrate\":%.2f,\"minimumbalance\":%.2f,\"withdrawallimit\":%.2f},"
                             .formatted(
                                     resultSet.getString("ACCOUNTBANKID"),
                                     resultSet.getString("ACCOUNTHOLDERID"),
                                     resultSet.getString("ACCOUNTHOLDERNAME"),
                                     resultSet.getString("ACCOUNTNUMBER"),
-                                    resultSet.getString("BALANCE"),
+                                    resultSet.getDouble("BALANCE"),
                                     resultSet.getString("ACCOUNTTYPE"),
                                     resultSet.getString("ISACTIVE"),
-                                    resultSet.getString("INTERESTRATE"),
-                                    resultSet.getString("MINIMUMBALANCE"), resultSet.getString("WITHDRAWLIMIT"));
+                                    resultSet.getDate("CREATEDAT").toString(),
+                                    resultSet.getDouble("INTERESTRATE"),
+                                    resultSet.getDouble("MINIMUMBALANCE"), resultSet.getDouble("WITHDRAWLIMIT"));
                 }
             }
-            response = response.substring(0, response.length() - 1) + "]}";
+            response = replaceLast(response, ",", "") + "]}";
         } catch (Exception e) {
             System.out.println(e);
             response = "{\"data\":\"%s\"}".formatted(e.toString());

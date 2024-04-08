@@ -19,25 +19,25 @@ class TransactionModel {
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     return TransactionModel(
-      transactionID: json['transactionID'],
-      senderID: json['senderID'],
-      receiverID: json['receiverID'],
+      transactionID: json['transactionid'],
+      senderID: json['senderid'],
+      receiverID: json['receiverid'],
       amount: json['amount'],
       timestamp: DateTime.parse(json['timestamp']),
       description: json['description'],
-      transactionState: json['transactionState'],
+      transactionState: json['transactionstate'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'transactionID': transactionID,
-      'senderID': senderID,
-      'receiverID': receiverID,
+      'transactionid': transactionID,
+      'senderid': senderID,
+      'receiverid': receiverID,
       'amount': amount,
       'timestamp': timestamp.toIso8601String(),
       'description': description,
-      'transactionState': transactionState,
+      'transactionstate': transactionState,
     };
   }
 }

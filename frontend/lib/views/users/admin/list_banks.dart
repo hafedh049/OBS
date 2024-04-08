@@ -32,7 +32,7 @@ class _BanksListState extends State<BanksList> {
     try {
       final Response response = await Dio().get("$ip/getAllBanks");
       final List<BankModel> banks = <BankModel>[];
-      for (final e in response.data["data"]) {
+      for (final dynamic e in response.data["data"]) {
         banks.add(BankModel.fromJson(e));
       }
       return banks;

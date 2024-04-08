@@ -5,7 +5,7 @@ class AccountModel {
   final String accountHolderName;
   final double balance;
   final String accountType;
-  final bool isActive;
+  final String isActive;
   final double? overdraftLimit;
   final double? maxTransLimit;
   final double? interestRate;
@@ -31,36 +31,36 @@ class AccountModel {
 
   factory AccountModel.fromJson(Map<String, dynamic> json) {
     return AccountModel(
-      accountBankID: json['accountBankID'],
-      accountHolderID: json['accountHolderID'],
-      accountNumber: json['accountNumber'],
-      accountHolderName: json['accountHolderName'],
+      accountBankID: json['accountbankid'],
+      accountHolderID: json['accountholderid'],
+      accountNumber: json['accountnumber'],
+      accountHolderName: json['accountholdername'],
       balance: json['balance'],
-      accountType: json['accountType'],
-      isActive: json['isActive'],
-      overdraftLimit: json['overdraftLimit'],
-      maxTransLimit: json['maxTransLimit'],
-      interestRate: json['interestRate'],
-      minimumBalance: json['minimumBalance'],
-      withdrawLimit: json['withdrawLimit'],
-      createdAt: DateTime.parse(json["createdAt"]),
+      accountType: json['accounttype'],
+      isActive: json['isactive'] == "true" ? "ACTIVATED" : "DEACTIVATED",
+      overdraftLimit: json['overdraftlimit'],
+      maxTransLimit: json['maxtranslimit'],
+      interestRate: json['interestrate'],
+      minimumBalance: json['minimumbalance'],
+      withdrawLimit: json['withdrawlimit'],
+      createdAt: DateTime.parse(json["createdat"]),
     );
   }
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'accountBankID': accountBankID,
-      'accountHolderID': accountHolderID,
-      'accountNumber': accountNumber,
-      'accountHolderName': accountHolderName,
+      'accountbankid': accountBankID,
+      'accountholderid': accountHolderID,
+      'accountnumber': accountNumber,
+      'accountholdername': accountHolderName,
       'balance': balance,
-      'accountType': accountType,
-      'isActive': isActive,
-      'overdraftLimit': overdraftLimit,
-      'maxTransLimit': maxTransLimit,
-      'interestRate': interestRate,
-      'minimumBalance': minimumBalance,
-      'withdrawLimit': withdrawLimit,
+      'accounttype': accountType,
+      'isactive': isActive,
+      'overdraftlimit': overdraftLimit,
+      'maxtranslimit': maxTransLimit,
+      'interestrate': interestRate,
+      'minimumbalance': minimumBalance,
+      'withdrawlimit': withdrawLimit,
     };
   }
 }

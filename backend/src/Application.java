@@ -5,6 +5,7 @@ import GUI.AddBank;
 import GUI.AddUser;
 import GUI.DeleteBank;
 import GUI.DeleteUser;
+import GUI.Deposit;
 import GUI.ForgetPassword;
 import GUI.GetAllAccounts;
 import GUI.GetAllBanks;
@@ -13,6 +14,7 @@ import GUI.Login;
 import GUI.SignUp;
 import GUI.UpdateBank;
 import GUI.UpdateUser;
+import GUI.Withdraw;
 
 import java.net.InetSocketAddress;
 import com.sun.net.httpserver.HttpServer;
@@ -36,6 +38,8 @@ public class Application {
 			server.createContext("/getAllUsers", new GetAllUsers());
 			server.createContext("/addAccount", new AddAccount());
 			server.createContext("/getAllAccounts", new GetAllAccounts());
+			server.createContext("/withdraw", new Withdraw());
+			server.createContext("/deposit", new Deposit());
 			server.start();
 			System.out.println("Server is running on port 8000");
 		} catch (Exception e) {

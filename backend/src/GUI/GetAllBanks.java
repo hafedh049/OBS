@@ -10,6 +10,16 @@ import java.io.OutputStream;
 import java.sql.ResultSet;
 
 public class GetAllBanks implements HttpHandler {
+    public String replaceLast(String original, String searchString, String replacement) {
+        int lastIndex = original.lastIndexOf(searchString);
+        if (lastIndex == -1) {
+            // If the search string is not found, return the original string unchanged
+            return original;
+        }
+        String prefix = original.substring(0, lastIndex);
+        String suffix = original.substring(lastIndex + searchString.length());
+        return prefix + replacement + suffix;
+    }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -25,7 +35,7 @@ public class GetAllBanks implements HttpHandler {
                         resultSet.getString("bankid"),
                         resultSet.getString("bankname"), resultSet.getString("bankaddress"));
             }
-            response = response.substring(0, response.length() - 1) + "]}";
+            response = replaceLast(response, ",", "") + "]}";
         } catch (Exception e) {
             System.out.println(e);
             response = "{\"data\":\"%s\"}".formatted(e.toString());

@@ -4,10 +4,10 @@ import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:frontend/utils/helpers/screen_container.dart';
 import 'package:frontend/utils/shared.dart';
 import 'package:frontend/views/auth/sign_in.dart';
-import 'package:frontend/views/users/client/accounts/accounts_list.dart';
-import 'package:frontend/views/users/client/accounts/add_account.dart';
-import 'package:frontend/views/users/client/accounts/disposit_account.dart';
-import 'package:frontend/views/users/client/accounts/withdraw_account.dart';
+import 'package:frontend/views/users/client/accounts_list.dart';
+import 'package:frontend/views/users/client/add_account.dart';
+import 'package:frontend/views/users/client/disposit_account.dart';
+import 'package:frontend/views/users/client/withdraw_account.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ClientHolder extends StatefulWidget {

@@ -151,7 +151,7 @@ class _AccountsListState extends State<AccountsList> {
                                               children: <Widget>[
                                                 Text("Account state", style: GoogleFonts.itim(fontSize: 18, fontWeight: FontWeight.w500, color: greyColor)),
                                                 const SizedBox(width: 10),
-                                                Text(_accounts[index].isActive ? "ACTIVE" : "DISABLED", style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
+                                                Text(_accounts[index].isActive, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greenColor)),
                                               ],
                                             ),
                                             if (_accounts[index].accountType == "CURRENT") ...<Widget>[

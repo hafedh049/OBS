@@ -10,7 +10,7 @@ import 'package:frontend/utils/callbacks.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-import '../../../../../utils/shared.dart';
+import '../../../utils/shared.dart';
 
 class SavingsForm extends StatefulWidget {
   const SavingsForm({super.key});
@@ -30,6 +30,8 @@ class _SavingsFormState extends State<SavingsForm> {
   BankModel _selectedBank = BankModel(bankID: "CHOOSE BANK ACCOUNT", bankName: "CHOOSE BANK ACCOUNT", bankAddress: "CHOOSE BANK ACCOUNT");
 
   final DropdownController _banksController = DropdownController();
+
+  final GlobalKey<State<StatefulWidget>> _banksKey = GlobalKey<State<StatefulWidget>>();
 
   Future<bool> _getAllBanks() async {
     _banks = <BankModel>[];
@@ -66,7 +68,7 @@ class _SavingsFormState extends State<SavingsForm> {
       );
       _balanceController.clear();
       _selectedBank = BankModel(bankID: "CHOOSE BANK ACCOUNT", bankName: "CHOOSE BANK ACCOUNT", bankAddress: "CHOOSE BANK ACCOUNT");
-      _banksController.resetValue();
+      _banksKey.currentState!.setState(() {});
       // ignore: use_build_context_synchronously
       showToast(context, "Account added successfully", greenColor);
     }
@@ -127,21 +129,27 @@ class _SavingsFormState extends State<SavingsForm> {
                         FutureBuilder<bool>(
                           future: _getAllBanks(),
                           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                            return CoolDropdown<String>(
-                              resultOptions: ResultOptions(
-                                textStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
-                                boxDecoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: scaffoldColor),
-                                openBoxDecoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: scaffoldColor),
-                              ),
-                              dropdownItemOptions: DropdownItemOptions(
-                                selectedTextStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w600, color: purpleColor),
-                                textStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
-                              ),
-                              dropdownOptions: DropdownOptions(borderRadius: BorderRadius.circular(10), color: scaffoldColor),
-                              defaultItem: CoolDropdownItem(label: "CHOOSE BANK ACCOUNT", value: "CHOOSE BANK ACCOUNT"),
-                              dropdownList: _banks.map((BankModel e) => CoolDropdownItem<String>(label: e.bankName.toUpperCase(), value: e.bankID)).toList(),
-                              controller: _banksController,
-                              onChange: (String bankID) => _selectedBank = _banks.firstWhere((BankModel e) => e.bankID == bankID),
+                            return StatefulBuilder(
+                              key: _banksKey,
+                              builder: (BuildContext context, void Function(void Function()) snapshot) {
+                                return CoolDropdown<String>(
+                                  isMarquee: true,
+                                  resultOptions: ResultOptions(
+                                    textStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
+                                    boxDecoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: scaffoldColor),
+                                    openBoxDecoration: BoxDecoration(borderRadius: BorderRadius.circular(5), color: scaffoldColor),
+                                  ),
+                                  dropdownItemOptions: DropdownItemOptions(
+                                    selectedTextStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w600, color: purpleColor),
+                                    textStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
+                                  ),
+                                  dropdownOptions: DropdownOptions(borderRadius: BorderRadius.circular(10), color: scaffoldColor),
+                                  defaultItem: CoolDropdownItem(label: "CHOOSE BANK ACCOUNT", value: "CHOOSE BANK ACCOUNT"),
+                                  dropdownList: _banks.map((BankModel e) => CoolDropdownItem<String>(label: e.bankName.toUpperCase(), value: e.bankID)).toList(),
+                                  controller: _banksController,
+                                  onChange: (String bankID) => _selectedBank = _banks.firstWhere((BankModel e) => e.bankID == bankID),
+                                );
+                              },
                             );
                           },
                         ),

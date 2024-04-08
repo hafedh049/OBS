@@ -1,5 +1,7 @@
 package Account;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.util.UUID;
 
 import com.mysql.cj.xdevapi.DbDoc;
@@ -12,6 +14,15 @@ public class BankAccount {
 	protected double balance;
 	protected String accountType;
 	protected String isActive;
+	protected Date createAt;
+
+	public Date getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
+	}
 
 	public void setAccountBankID(String accountBankID) {
 		this.accountBankID = accountBankID;
@@ -72,6 +83,7 @@ public class BankAccount {
 	public BankAccount(DbDoc json) {
 		this.accountBankID = json.get("bankid").toString().replaceAll("\"", "");
 		this.accountNumber = UUID.randomUUID().toString();
+		this.createAt = new Date(Instant.now().toEpochMilli());
 		this.accountHolderName = json.get("username").toString().replaceAll("\"", "");
 		this.accountHolderID = json.get("userid").toString().replaceAll("\"", "");
 		this.balance = Double.parseDouble(json.get("balance").toString());

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_tilt/flutter_tilt.dart';
-import 'package:frontend/views/users/client/accounts/current_account/current_form.dart';
-import 'package:frontend/views/users/client/accounts/saving_account/savings_form.dart';
+import 'package:frontend/views/users/client/current_form.dart';
+import 'package:frontend/views/users/client/savings_form.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-import '../../../../utils/shared.dart';
+import '../../../utils/shared.dart';
 
 class AddAccount extends StatefulWidget {
   const AddAccount({super.key});

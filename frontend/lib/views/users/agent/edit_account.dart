@@ -42,7 +42,7 @@ class _EditAccountState extends State<EditAccount> {
     _accountNumberController.text = widget.account.accountNumber;
     _balanceController.text = widget.account.balance.toStringAsFixed(2);
     _accountTypeController.text = widget.account.accountType;
-    _isActiveController.text = widget.account.isActive ? "ACTIVE" : "DISABLED";
+    _isActiveController.text = widget.account.isActive;
 
     if (widget.account.accountType == "CURRENT") {
       _overdraftLimitController.text = widget.account.overdraftLimit!.toStringAsFixed(2);

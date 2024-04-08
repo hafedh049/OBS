@@ -45,7 +45,7 @@ public class DatabaseHelper {
                                 ");");
 
                 statement.execute("CREATE TABLE IF NOT EXISTS ACCOUNTS (" +
-                                "ACCOUNTBANKID VARCHAR(255) PRIMARY KEY, " +
+                                "ACCOUNTBANKID VARCHAR(255), " +
                                 "ACCOUNTHOLDERID VARCHAR(255), " +
                                 "ACCOUNTNUMBER VARCHAR(255), " +
                                 "ACCOUNTHOLDERNAME VARCHAR(255), " +
@@ -56,7 +56,9 @@ public class DatabaseHelper {
                                 "MAXTRANSLIMIT DOUBLE, " +
                                 "INTERESTRATE DOUBLE, " +
                                 "MINIMUMBALANCE DOUBLE, " +
-                                "WITHDRAWLIMIT DOUBLE" +
+                                "WITHDRAWLIMIT DOUBLE," +
+                                "CREATEDAT DATE," +
+                                "PRIMARY KEY(ACCOUNTBANKID,ACCOUNTHOLDERID,ACCOUNTNUMBER)" +
                                 ");");
         }
 }

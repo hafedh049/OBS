@@ -1,8 +1,9 @@
 package Transaction;
 
+import java.time.Instant;
 import java.util.*;
 
-import Database.DatabaseHelper;
+import com.mysql.cj.xdevapi.DbDoc;
 
 public class Transaction {
     private String transactionID;
@@ -16,17 +17,24 @@ public class Transaction {
     private String description;
     private String transactionState;
 
-    public Transaction(String from, String to, double amount, Date transactionDate,
-            String description, String transaction, String currencyFrom, String currencyTo) {
-        this.currencyFrom = currencyFrom;
-        this.currencyTo = currencyTo;
+    public Transaction(DbDoc json) {
+        this.currencyFrom = json.get("currencyfrom").toString().replaceAll("\"", "");
+        this.currencyTo = json.get("currencyto").toString().replaceAll("\"", "");
         this.transactionID = UUID.randomUUID().toString();
+        this.from = json.get("senderid").toString().replaceAll("\"", "");
+        this.to = json.get("receiverid").toString().replaceAll("\"", "");
+        this.amount = Double.parseDouble(json.get("amount").toString().replaceAll("\"", ""));
+        this.transactionDate = Date.from(Instant.now());
+        this.description = json.get("description").toString().replaceAll("\"", "");
+        this.transactionState = json.get("state").toString().replaceAll("\"", "");
+    }
+
+    public void setFrom(String from) {
         this.from = from;
-        this.to = to;
-        this.amount = amount;
-        this.transactionDate = transactionDate;
-        this.description = description;
-        this.transactionState = transaction;
+    }
+
+    public String getTo() {
+        return to;
     }
 
     public String getCurrencyFrom() {
@@ -93,8 +101,4 @@ public class Transaction {
         this.description = description;
     }
 
-    public static void deposit(Transaction transaction) throws Exception {
-        DatabaseHelper.statement.execute("INSERT INTO TRANSACTIONS (TRANSACTIONID, SENDERID, RECEIVERID, CURRENCYFROM, CURRENCYTO, AMOUNT, TIMESTAMP, DESCRIPTION, STATUS) VALUES ('%s', '%s', '%s', '%s', '%s', %.2f, '%s', '%s', '%s');".formatted(transactionID, senderID, receiverID, currencyFrom, currencyTo, amount, timestamp, description, status);
-);
-    }
 }
