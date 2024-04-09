@@ -30,7 +30,6 @@ public class AddAccount implements HttpHandler {
         String response = "";
 
         try {
-            System.out.println(json);
             if (json.get("type").toString().equals("\"CURRENT\"")) {
                 Client.addAccount(new CurrentAccount(json));
             } else {
