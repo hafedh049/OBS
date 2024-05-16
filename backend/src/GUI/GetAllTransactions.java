@@ -40,7 +40,8 @@ public class GetAllTransactions implements HttpHandler {
             final DbDoc json = JsonParser.parseDoc(request);
             final ResultSet resultSet = DatabaseHelper.statement
                     .executeQuery(
-                            String.format("SELECT * FROM TRANSACTIONS WHERE SENDERID = '%s' OR RECEIVERID = '%s';",
+                            String.format(
+                                    "SELECT * FROM TRANSACTIONS WHERE SENDERID = '%s' OR RECEIVERID = '%s' ORDER BY DATE(TIMESTAMP);",
                                     json.get("senderid").toString().replaceAll("\"", ""),
                                     json.get("senderid").toString().replaceAll("\"", "")));
             while (resultSet.next()) {

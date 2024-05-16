@@ -26,7 +26,6 @@ class _TransactionsListState extends State<TransactionsList> {
   Future<List<TransactionModel>> _loadTransactions() async {
     try {
       final Response response = await Dio().post("$ip/getAllTransactions", data: <String, dynamic>{"senderid": widget.senderID});
-      print(response.data["data"]);
       return response.data["data"].map((e) => TransactionModel.fromJson(e)).toList().cast<TransactionModel>();
     } catch (e) {
       return Future.error(e);

@@ -33,16 +33,18 @@ public class SignUp implements HttpHandler {
             if (resultSet.next()) {
                 response = "{\"data\":\"Username already exists\"}";
             } else {
+                final String id = UUID.randomUUID().toString();
                 DatabaseHelper.statement
                         .execute("INSERT INTO USERS VALUES ('"
-                                + UUID.randomUUID().toString()
+                                + id
                                 + "'," + json.get("username")
                                 + ", " + json.get("password") + ", " + json.get("email") + ", " + json.get("role")
-                                + ")");
+                                + ",NULL);");
 
-                response = "{\"data\":\"Signed up successfully!\"}";
+                response = "{\"data\":\"Signed up successfully!\",\"uid\":\"%s\"}".formatted(id);
             }
         } catch (Exception e) {
+            response = "{\"data\":\"%s\"}".formatted(e.toString());
             System.out.println(e);
         }
 

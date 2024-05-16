@@ -1,5 +1,7 @@
 package User;
 
+import java.sql.ResultSet;
+
 import com.mysql.cj.xdevapi.DbDoc;
 
 import Bank.Bank;
@@ -21,6 +23,22 @@ public class Admin extends User {
 
         public static void deleteBank(String bankID) throws Exception {
                 DatabaseHelper.statement.execute(String.format("DELETE FROM BANKS WHERE BANKID = '%s';", bankID));
+                final ResultSet result = DatabaseHelper.statement
+                                .executeQuery(String.format(
+                                                "SELECT ACCOUNTNUMBER FROM ACCOUNTS WHERE ACCOUNTBANKID = '%s';",
+                                                bankID));
+
+                while (result.next()) {
+                        DatabaseHelper.statement
+                                        .execute(String.format(
+                                                        "DELETE FROM TRANSACTIONS WHERE SENDERID = '%s' OR RECEIVERID = '%s';",
+                                                        result.getString("ACCOUNTNUMBER"),
+                                                        result.getString("ACCOUNTNUMBER")));
+                }
+
+                DatabaseHelper.statement.execute(String.format("DELETE FROM USERS WHERE BANKID = '%s';", bankID));
+                DatabaseHelper.statement
+                                .execute(String.format("DELETE FROM ACCOUNTS WHERE ACCOUNTBANKID = '%s';", bankID));
         }
 
         public static void updateBank(Bank bank) throws Exception {

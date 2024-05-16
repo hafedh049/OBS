@@ -69,8 +69,9 @@ class _WithdrawState extends State<WithdrawFromAccount> {
     } else if (_toCurrencyController.text.trim().isEmpty) {
       showToast(context, "To Currency should be filled", redColor);
     } else {
+      await _loadMyAccounts();
       final AccountModel myAccount = _accounts.firstWhere((AccountModel element) => element.accountNumber == _searchMyAccountsController.text);
-      if ((myAccount.accountType.toUpperCase() == "CURRENT" && myAccount.balance >= double.parse(_fromController.text)) || (myAccount.accountType.toUpperCase() == "SAVINGS" && myAccount.balance - double.parse(_fromController.text) > -myAccount.withdrawLimit!)) {
+      if ((myAccount.accountType.toUpperCase() == "CURRENT" && myAccount.balance >= double.parse(_fromController.text)) || (myAccount.accountType.toUpperCase() == "SAVINGS" && myAccount.balance - double.parse(_fromController.text) >= -myAccount.withdrawLimit!)) {
         await Dio().post(
           "$ip/withdraw",
           data: <String, dynamic>{
@@ -80,7 +81,7 @@ class _WithdrawState extends State<WithdrawFromAccount> {
             "currencyto": _toCurrencyController.text,
             "amount": _fromController.text.isEmpty ? 0.00 : double.parse(_fromController.text),
             "description": _descriptionController.text.trim(),
-            "state": "PENDING",
+            "state": "COMPLETED",
           },
         );
         // ignore: use_build_context_synchronously

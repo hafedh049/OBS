@@ -20,8 +20,11 @@ class _AccountsListState extends State<AccountsList> {
   final List<AccountModel> _accountsList = <AccountModel>[];
 
   Future<bool> _loadAccounts() async {
+    _accountsList.clear();
     for (final dynamic account in (await Dio().post("$ip/getAllAccounts")).data["data"]) {
-      _accountsList.add(AccountModel.fromJson(account));
+      if (account["accountholderid"] == user!.userID) {
+        _accountsList.add(AccountModel.fromJson(account));
+      }
     }
     return true;
   }

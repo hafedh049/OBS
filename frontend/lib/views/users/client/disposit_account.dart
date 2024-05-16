@@ -69,6 +69,7 @@ class _Disposit2AccountState extends State<Disposit2Account> {
     } else if (_toCurrencyController.text.trim().isEmpty) {
       showToast(context, "To Currency should be filled", redColor);
     } else {
+      await _loadMyAccounts();
       final AccountModel myAccount = _accounts.firstWhere((element) => element.accountNumber == _searchMyAccountsController.text);
       if (myAccount.balance >= double.parse(_fromController.text)) {
         await Dio().post(
@@ -80,7 +81,7 @@ class _Disposit2AccountState extends State<Disposit2Account> {
             "currencyto": _toCurrencyController.text,
             "amount": _fromController.text.isEmpty ? 0.00 : double.parse(_fromController.text),
             "description": _descriptionController.text.trim(),
-            "state": "PENDING",
+            "state": "COMPLETED",
           },
         );
         // ignore: use_build_context_synchronously
@@ -93,6 +94,7 @@ class _Disposit2AccountState extends State<Disposit2Account> {
         _searchMyAccountsController.clear();
         _descriptionController.clear();
       } else {
+        // ignore: use_build_context_synchronously
         showToast(context, "Invalid Balance", redColor);
       }
     }
@@ -248,6 +250,7 @@ class _Disposit2AccountState extends State<Disposit2Account> {
                                           suffixIcon: _searchAccountsController.text.trim().isEmpty ? const SizedBox() : const Icon(FontAwesome.circle_check_solid, size: 15, color: greenColor),
                                         ),
                                         suggestions: _accounts
+                                            .where((AccountModel element) => element.accountHolderID == user!.userID)
                                             .map(
                                               (AccountModel e) => SearchFieldListItem<String>(
                                                 e.accountNumber,

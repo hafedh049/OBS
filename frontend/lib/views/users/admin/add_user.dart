@@ -168,7 +168,7 @@ class _AddUserState extends State<AddUser> {
                                       item: e.bankID,
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Text(e.bankID, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
+                                        child: Text(e.bankName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
                                       ),
                                     ),
                                   )
@@ -191,7 +191,7 @@ class _AddUserState extends State<AddUser> {
                                     item: e.bankID,
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(e.bankID, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
+                                      child: Text(e.bankName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
                                     ),
                                   ),
                                 )

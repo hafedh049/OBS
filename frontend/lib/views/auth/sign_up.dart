@@ -66,7 +66,7 @@ class _SignUpState extends State<SignUp> {
           user = UserModel(
             bankID: null,
             userEmail: _emailController.text,
-            userID: "",
+            userID: response.data["uid"],
             userPassword: _passwordController.text,
             userName: _usernameController.text,
             userRole: _selectedRole.toUpperCase(),
