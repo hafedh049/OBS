@@ -45,7 +45,7 @@ public class GetAllAccounts implements HttpHandler {
                                     resultSet.getDouble("OVERDRAFTLIMIT"),
                                     resultSet.getDouble("MAXTRANSLIMIT"));
                 } else {
-                    response += "{\"accountbankid\":\"%s\",\"accountholderid\":\"%s\",\"accountholdername\":\"%s\",\"accountnumber\":\"%s\",\"balance\":%.2f,\"accounttype\":\"%s\",\"isactive\":\"%s\",\"createdat\":\"%s\",\"interestrate\":%.2f,\"minimumbalance\":%.2f,\"withdrawallimit\":%.2f},"
+                    response += "{\"accountbankid\":\"%s\",\"accountholderid\":\"%s\",\"accountholdername\":\"%s\",\"accountnumber\":\"%s\",\"balance\":%.2f,\"accounttype\":\"%s\",\"isactive\":\"%s\",\"createdat\":\"%s\",\"interestrate\":%.2f,\"minimumbalance\":%.2f,\"withdrawlimit\":%f},"
                             .formatted(
                                     resultSet.getString("ACCOUNTBANKID"),
                                     resultSet.getString("ACCOUNTHOLDERID"),

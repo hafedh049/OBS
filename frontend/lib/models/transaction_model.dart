@@ -25,7 +25,7 @@ class TransactionModel {
       amount: json['amount'],
       timestamp: DateTime.parse(json['timestamp']),
       description: json['description'],
-      transactionState: json['transactionstate'],
+      transactionState: json['status'],
     );
   }
 
@@ -37,7 +37,7 @@ class TransactionModel {
       'amount': amount,
       'timestamp': timestamp.toIso8601String(),
       'description': description,
-      'transactionstate': transactionState,
+      'status': transactionState,
     };
   }
 }

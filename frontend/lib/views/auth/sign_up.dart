@@ -36,8 +36,6 @@ class _SignUpState extends State<SignUp> {
 
   final Map<String, List<dynamic>> _icons = const <String, List<dynamic>>{
     "Client": <dynamic>[FontAwesome.person_circle_check_solid, greenColor],
-    "Admin": <dynamic>[Icons.admin_panel_settings, blueColor],
-    "Agent": <dynamic>[Icons.support_agent, Colors.amber],
   };
 
   Future<void> _signUp() async {
@@ -61,10 +59,12 @@ class _SignUpState extends State<SignUp> {
             "password": _passwordController.text,
             "email": _emailController.text,
             "role": _selectedRole.toUpperCase(),
+            "bankid": null,
           },
         );
         if (response.data["data"] == "Signed up successfully!") {
           user = UserModel(
+            bankID: null,
             userEmail: _emailController.text,
             userID: "",
             userPassword: _passwordController.text,

@@ -1,6 +1,5 @@
 package Transaction;
 
-import java.time.Instant;
 import java.util.*;
 
 import com.mysql.cj.xdevapi.DbDoc;
@@ -11,9 +10,8 @@ public class Transaction {
     private String to;
     private String currencyFrom;
     private String currencyTo;
-
     private double amount;
-    private Date transactionDate;
+    private String transactionDate;
     private String description;
     private String transactionState;
 
@@ -24,7 +22,13 @@ public class Transaction {
         this.from = json.get("senderid").toString().replaceAll("\"", "");
         this.to = json.get("receiverid").toString().replaceAll("\"", "");
         this.amount = Double.parseDouble(json.get("amount").toString().replaceAll("\"", ""));
-        this.transactionDate = Date.from(Instant.now());
+
+        Date dt = new Date();
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentTime = sdf.format(dt);
+        System.out.println(currentTime);
+        this.transactionDate = currentTime;
+
         this.description = json.get("description").toString().replaceAll("\"", "");
         this.transactionState = json.get("state").toString().replaceAll("\"", "");
     }
@@ -85,11 +89,11 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public Date getTransactionDate() {
+    public String getTransactionDate() {
         return transactionDate;
     }
 
-    public void setTransactionDate(Date transactionDate) {
+    public void setTransactionDate(String transactionDate) {
         this.transactionDate = transactionDate;
     }
 

@@ -1,4 +1,5 @@
 import 'package:date_format/date_format.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,9 +23,11 @@ class _TransactionsListState extends State<TransactionsList> {
 
   List<TransactionModel> _transactions = <TransactionModel>[];
 
-  Future<List<TransactionModel>> _loadBanks() async {
+  Future<List<TransactionModel>> _loadTransactions() async {
     try {
-      return <TransactionModel>[];
+      final Response response = await Dio().post("$ip/getAllTransactions", data: <String, dynamic>{"senderid": widget.senderID});
+      print(response.data["data"]);
+      return response.data["data"].map((e) => TransactionModel.fromJson(e)).toList().cast<TransactionModel>();
     } catch (e) {
       return Future.error(e);
     }
@@ -39,12 +42,18 @@ class _TransactionsListState extends State<TransactionsList> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text("Transactions List", style: GoogleFonts.itim(fontSize: 22, fontWeight: FontWeight.w500, color: greyColor)),
+            Row(
+              children: <Widget>[
+                IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(FontAwesome.chevron_left_solid, size: 25, color: purpleColor)),
+                const SizedBox(width: 10),
+                Text("Transactions List", style: GoogleFonts.itim(fontSize: 22, fontWeight: FontWeight.w500, color: greyColor)),
+              ],
+            ),
             Container(width: MediaQuery.sizeOf(context).width, height: .3, color: greyColor, margin: const EdgeInsets.symmetric(vertical: 20)),
             Expanded(
               child: Center(
                 child: FutureBuilder<List<TransactionModel>>(
-                  future: _loadBanks(),
+                  future: _loadTransactions(),
                   builder: (BuildContext context, AsyncSnapshot<List<TransactionModel>> snapshot) {
                     if (snapshot.hasData) {
                       _transactions = snapshot.data!;

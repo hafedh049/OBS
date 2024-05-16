@@ -84,22 +84,32 @@ public class Client extends User {
 
         public static void deposit(Transaction trans) throws Exception {
                 DatabaseHelper.statement.execute(
-                                "INSERT INTO TRANSACTIONS (transactionid, senderid, receivedid, currencyfrom, currencyto, amount, timestamp, description, status) VALUES ('%s', '%s', '%s', '%s', '%s', %.2f, '%s', '%s', '%s');"
+                                "INSERT INTO TRANSACTIONS (transactionid, senderid, receiverid, currencyfrom, currencyto, amount, timestamp, description, status) VALUES ('%s', '%s', '%s', '%s', '%s', %.2f, '%s', '%s', '%s');"
                                                 .formatted(trans.getTransactionID(), trans.getFrom(), trans.getTo(),
                                                                 trans.getCurrencyFrom(),
-                                                                trans.getTo(),
+                                                                trans.getCurrencyTo(),
                                                                 trans.getAmount(), trans.getTransactionDate(),
                                                                 trans.getDescription(),
                                                                 trans.getTransactionState()));
+
+                DatabaseHelper.statement.execute(
+                                String.format("UPDATE ACCOUNTS SET BALANCE = BALANCE + %f WHERE ACCOUNTNUMBER = '%s';",
+                                                trans.getAmount(), trans.getTo()));
+                DatabaseHelper.statement.execute(
+                                String.format("UPDATE ACCOUNTS SET BALANCE = BALANCE - %f WHERE ACCOUNTNUMBER = '%s';",
+                                                trans.getAmount(), trans.getFrom()));
         }
 
         public static void withdraw(Transaction trans) throws Exception {
                 DatabaseHelper.statement.execute(
-                                "INSERT INTO TRANSACTIONS (transactionid, senderid, receivedid, currencyfrom, currencyto, amount, timestamp, description, status) VALUES ('%s', '%s', 'WITHDRAW', 'WITHDRAW', '%s', %.2f, '%s', '%s', 'CONFIRMED');"
-                                                .formatted(trans.getTransactionID(), trans.getFrom(),
-                                                                trans.getCurrencyFrom(),
+                                "INSERT INTO TRANSACTIONS (transactionid, senderid, receiverid, currencyfrom, currencyto, amount, timestamp, description, status) VALUES ('%s', '%s', '%s', '%s', '%s', %.2f, '%s', '%s', 'CONFIRMED');"
+                                                .formatted(trans.getTransactionID(), trans.getFrom(), trans.getTo(),
+                                                                trans.getCurrencyFrom(), trans.getCurrencyTo(),
                                                                 trans.getAmount(), trans.getTransactionDate(),
                                                                 trans.getDescription()));
+                DatabaseHelper.statement.execute(
+                                String.format("UPDATE ACCOUNTS SET BALANCE = BALANCE - %f WHERE ACCOUNTNUMBER = '%s';",
+                                                trans.getAmount(), trans.getTo()));
         }
 
 }

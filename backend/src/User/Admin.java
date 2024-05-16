@@ -34,7 +34,7 @@ public class Admin extends User {
                 DatabaseHelper.statement
                                 .execute(
                                                 String.format(
-                                                                "INSERT INTO USERS VALUES('%s','%s','%s','%s','CLIENT');",
+                                                                "INSERT INTO USERS VALUES('%s','%s','%s','%s','CLIENT',NULL);",
                                                                 client.userID, client.username, client.password,
                                                                 client.email));
 
@@ -60,9 +60,9 @@ public class Admin extends User {
                 DatabaseHelper.statement
                                 .execute(
                                                 String.format(
-                                                                "INSERT INTO USERS VALUES('%s','%s','%s','%s','AGENT');",
+                                                                "INSERT INTO USERS VALUES('%s','%s','%s','%s','AGENT','%s');",
                                                                 agent.userID, agent.username, agent.password,
-                                                                agent.email));
+                                                                agent.email, agent.bankID));
 
         }
 
@@ -78,15 +78,6 @@ public class Admin extends User {
                                                                 "UPDATE USERS SET USERNAME = '%s',EMAIL = '%s',PASSWORD = '%s' WHERE USERID = '%s';",
                                                                 agent.username, agent.email, agent.password,
                                                                 agent.userID));
-
-        }
-
-        // JUST FOR TESTING PURPOSES
-        public static void addAdmin(Admin admin) throws Exception {
-                DatabaseHelper.statement
-                                .execute(
-                                                String.format(
-                                                                "INSERT INTO USERS VALUES('0','HAFEDH GUENICHI','norootsquach','hafedhgunichi@gmail.com','ADMIN');"));
 
         }
 

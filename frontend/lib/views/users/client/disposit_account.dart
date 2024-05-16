@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:frontend/models/account_model.dart';
+import 'package:frontend/utils/callbacks.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:searchfield/searchfield.dart';
@@ -18,9 +19,6 @@ class Disposit2Account extends StatefulWidget {
 }
 
 class _Disposit2AccountState extends State<Disposit2Account> {
-  final TextEditingController _accountNumberController = TextEditingController();
-  final TextEditingController _balanceController = TextEditingController();
-
   final TextEditingController _searchAccountsController = TextEditingController();
   final TextEditingController _searchMyAccountsController = TextEditingController();
 
@@ -61,19 +59,43 @@ class _Disposit2AccountState extends State<Disposit2Account> {
     "EUR2EUR": 1,
   };
 
-  Future<void> _withdraw() async {
-    await Dio().post(
-      "$ip/deposit",
-      data: <String, dynamic>{
-        "senderid": _accounts.firstWhere((AccountModel element) => element.accountHolderName == _searchMyAccountsController.text).accountHolderID,
-        "receiverid": _accounts.firstWhere((AccountModel element) => element.accountHolderName == _searchAccountsController.text).accountHolderID,
-        "currencyfrom": _fromCurrencyController.text,
-        "currencyto": _toCurrencyController.text,
-        "amount": _fromController.text.isEmpty ? 0.00 : _currencyExchange["${_fromCurrencyController.text}2${_toCurrencyController.text}"]! * double.parse(_fromController.text),
-        "description": _descriptionController.text.trim(),
-        "state": "COMPLETED",
-      },
-    );
+  Future<void> _deposite() async {
+    if (_searchAccountsController.text.trim().isEmpty) {
+      showToast(context, "ReceiverID should be filled", redColor);
+    } else if (_searchMyAccountsController.text.trim().isEmpty) {
+      showToast(context, "SenderID should be filled", redColor);
+    } else if (_fromCurrencyController.text.trim().isEmpty) {
+      showToast(context, "From Currency should be filled", redColor);
+    } else if (_toCurrencyController.text.trim().isEmpty) {
+      showToast(context, "To Currency should be filled", redColor);
+    } else {
+      final AccountModel myAccount = _accounts.firstWhere((element) => element.accountNumber == _searchMyAccountsController.text);
+      if (myAccount.balance >= double.parse(_fromController.text)) {
+        await Dio().post(
+          "$ip/deposit",
+          data: <String, dynamic>{
+            "senderid": _searchMyAccountsController.text,
+            "receiverid": _searchAccountsController.text,
+            "currencyfrom": _fromCurrencyController.text,
+            "currencyto": _toCurrencyController.text,
+            "amount": _fromController.text.isEmpty ? 0.00 : double.parse(_fromController.text),
+            "description": _descriptionController.text.trim(),
+            "state": "PENDING",
+          },
+        );
+        // ignore: use_build_context_synchronously
+        showToast(context, "Transaction Successfully added", greenColor);
+        _fromCurrencyController.clear();
+        _toCurrencyController.clear();
+        _fromController.clear();
+        _toController.clear();
+        _searchAccountsController.clear();
+        _searchMyAccountsController.clear();
+        _descriptionController.clear();
+      } else {
+        showToast(context, "Invalid Balance", redColor);
+      }
+    }
   }
 
   @override
@@ -82,8 +104,6 @@ class _Disposit2AccountState extends State<Disposit2Account> {
     _toCurrencyController.dispose();
     _fromController.dispose();
     _toController.dispose();
-    _accountNumberController.dispose();
-    _balanceController.dispose();
     _searchAccountsController.dispose();
     _searchMyAccountsController.dispose();
     _descriptionController.dispose();
@@ -92,7 +112,7 @@ class _Disposit2AccountState extends State<Disposit2Account> {
 
   Future<bool> _loadMyAccounts() async {
     _accounts.clear();
-    final response = await Dio().get("$ip/getAccounts", data: <String, dynamic>{"userid": user!.userID});
+    final response = await Dio().get("$ip/getAllAccounts");
     for (final dynamic account in response.data["data"]) {
       _accounts.add(AccountModel.fromJson(account));
     }
@@ -149,14 +169,14 @@ class _Disposit2AccountState extends State<Disposit2Account> {
                                             _myAccountsKey.currentState!.setState(() {});
                                           }
                                           return _accounts
-                                              .where((AccountModel element) => element.accountHolderID == user!.userID && element.accountHolderName.toLowerCase().startsWith(value.toLowerCase()))
+                                              .where((AccountModel element) => element.accountHolderID == user!.userID && element.accountNumber.toLowerCase().startsWith(value.toLowerCase()))
                                               .map(
                                                 (AccountModel e) => SearchFieldListItem<String>(
-                                                  e.accountHolderName,
-                                                  item: e.accountHolderName,
+                                                  e.accountNumber,
+                                                  item: e.accountNumber,
                                                   child: Padding(
                                                     padding: const EdgeInsets.all(8.0),
-                                                    child: Text(e.accountHolderName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
+                                                    child: Text(e.accountNumber, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
                                                   ),
                                                 ),
                                               )
@@ -168,7 +188,7 @@ class _Disposit2AccountState extends State<Disposit2Account> {
                                           contentPadding: const EdgeInsets.all(20),
                                           focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: purpleColor, width: 2, style: BorderStyle.solid)),
                                           border: InputBorder.none,
-                                          hintText: "WHICH ACOUNT?",
+                                          hintText: "FROM",
                                           hintStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greyColor),
                                           suffixIcon: _searchMyAccountsController.text.trim().isEmpty ? const SizedBox() : const Icon(FontAwesome.circle_check_solid, size: 15, color: greenColor),
                                         ),
@@ -176,11 +196,11 @@ class _Disposit2AccountState extends State<Disposit2Account> {
                                             .where((AccountModel element) => element.accountHolderID == user!.userID)
                                             .map(
                                               (AccountModel e) => SearchFieldListItem<String>(
-                                                e.accountHolderName,
-                                                item: e.accountHolderName,
+                                                e.accountNumber,
+                                                item: e.accountNumber,
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(8.0),
-                                                  child: Text(e.accountHolderName.toUpperCase(), style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
+                                                  child: Text(e.accountNumber.toUpperCase(), style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
                                                 ),
                                               ),
                                             )
@@ -204,14 +224,14 @@ class _Disposit2AccountState extends State<Disposit2Account> {
                                             _accountsKey.currentState!.setState(() {});
                                           }
                                           return _accounts
-                                              .where((AccountModel element) => element.accountHolderName.toLowerCase().startsWith(value.toLowerCase()))
+                                              .where((AccountModel element) => element.accountHolderID == user!.userID && element.accountNumber.toLowerCase().startsWith(value.toLowerCase()))
                                               .map(
                                                 (AccountModel e) => SearchFieldListItem<String>(
-                                                  e.accountHolderName,
-                                                  item: e.accountHolderName,
+                                                  e.accountNumber,
+                                                  item: e.accountNumber,
                                                   child: Padding(
                                                     padding: const EdgeInsets.all(8.0),
-                                                    child: Text(e.accountHolderName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
+                                                    child: Text(e.accountNumber, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
                                                   ),
                                                 ),
                                               )
@@ -223,18 +243,18 @@ class _Disposit2AccountState extends State<Disposit2Account> {
                                           contentPadding: const EdgeInsets.all(20),
                                           focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: purpleColor, width: 2, style: BorderStyle.solid)),
                                           border: InputBorder.none,
-                                          hintText: "WHICH ACOUNT?",
+                                          hintText: "TO",
                                           hintStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: greyColor),
                                           suffixIcon: _searchAccountsController.text.trim().isEmpty ? const SizedBox() : const Icon(FontAwesome.circle_check_solid, size: 15, color: greenColor),
                                         ),
                                         suggestions: _accounts
                                             .map(
                                               (AccountModel e) => SearchFieldListItem<String>(
-                                                e.accountHolderName,
-                                                item: e.accountHolderName,
+                                                e.accountNumber,
+                                                item: e.accountNumber,
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(8.0),
-                                                  child: Text(e.accountHolderName.toUpperCase(), style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
+                                                  child: Text(e.accountNumber.toUpperCase(), style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
                                                 ),
                                               ),
                                             )
@@ -465,7 +485,7 @@ class _Disposit2AccountState extends State<Disposit2Account> {
                         backgroundColor: purpleColor,
                         transitionType: TransitionType.TOP_TO_BOTTOM,
                         textStyle: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: whiteColor),
-                        onPress: _withdraw,
+                        onPress: _deposite,
                       ),
                     ],
                   ),

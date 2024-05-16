@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:searchfield/searchfield.dart';
 
+import '../../../utils/callbacks.dart';
 import '../../../utils/shared.dart';
 
 class WithdrawFromAccount extends StatefulWidget {
@@ -61,21 +62,39 @@ class _WithdrawState extends State<WithdrawFromAccount> {
   };
 
   Future<void> _withdraw() async {
-    await Dio().post(
-      "$ip/deposit",
-      data: <String, dynamic>{
-        "senderid": _accounts.firstWhere((AccountModel element) => element.accountHolderName == _searchMyAccountsController.text).accountHolderID,
-        "currencyfrom": _fromCurrencyController.text,
-        "amount": _fromController.text.isEmpty
-            ? 0.00
-            : _currencyExchange["${_fromCurrencyController.text}2${_toCurrencyController.text}"]! *
-                double.parse(
-                  _fromController.text,
-                ),
-        "description": _descriptionController.text.trim(),
-        "state": "COMPLETED",
-      },
-    );
+    if (_searchMyAccountsController.text.trim().isEmpty) {
+      showToast(context, "Select you account please.", redColor);
+    } else if (_fromCurrencyController.text.trim().isEmpty) {
+      showToast(context, "From Currency should be filled", redColor);
+    } else if (_toCurrencyController.text.trim().isEmpty) {
+      showToast(context, "To Currency should be filled", redColor);
+    } else {
+      final AccountModel myAccount = _accounts.firstWhere((AccountModel element) => element.accountNumber == _searchMyAccountsController.text);
+      if ((myAccount.accountType.toUpperCase() == "CURRENT" && myAccount.balance >= double.parse(_fromController.text)) || (myAccount.accountType.toUpperCase() == "SAVINGS" && myAccount.balance - double.parse(_fromController.text) > -myAccount.withdrawLimit!)) {
+        await Dio().post(
+          "$ip/withdraw",
+          data: <String, dynamic>{
+            "senderid": _searchMyAccountsController.text,
+            "receiverid": _searchMyAccountsController.text,
+            "currencyfrom": _fromCurrencyController.text,
+            "currencyto": _toCurrencyController.text,
+            "amount": _fromController.text.isEmpty ? 0.00 : double.parse(_fromController.text),
+            "description": _descriptionController.text.trim(),
+            "state": "PENDING",
+          },
+        );
+        // ignore: use_build_context_synchronously
+        showToast(context, "Withdraw Completed", greenColor);
+        _fromCurrencyController.clear();
+        _toCurrencyController.clear();
+        _fromController.clear();
+        _toController.clear();
+        _searchMyAccountsController.clear();
+        _descriptionController.clear();
+      } else {
+        showToast(context, "Invalid Balance", redColor);
+      }
+    }
   }
 
   @override
@@ -92,8 +111,8 @@ class _WithdrawState extends State<WithdrawFromAccount> {
 
   Future<bool> _loadMyAccounts() async {
     _accounts.clear();
-    final response = await Dio().get("$ip/getAccounts", data: <String, dynamic>{"userid": user!.userID});
-    for (final dynamic account in response.data["data"].where((e) => e.accountHolderID == user!.userID)) {
+    final response = await Dio().get("$ip/getAllAccounts");
+    for (final dynamic account in response.data["data"]) {
       _accounts.add(AccountModel.fromJson(account));
     }
     return true;
@@ -149,14 +168,14 @@ class _WithdrawState extends State<WithdrawFromAccount> {
                                             _myAccountsKey.currentState!.setState(() {});
                                           }
                                           return _accounts
-                                              .where((AccountModel element) => element.accountHolderName.toLowerCase().startsWith(value.toLowerCase()))
+                                              .where((AccountModel element) => element.accountNumber.startsWith(value))
                                               .map(
                                                 (AccountModel e) => SearchFieldListItem<String>(
-                                                  e.accountHolderName,
-                                                  item: e.accountHolderName,
+                                                  e.accountNumber,
+                                                  item: e.accountNumber,
                                                   child: Padding(
                                                     padding: const EdgeInsets.all(8.0),
-                                                    child: Text(e.accountHolderName, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
+                                                    child: Text(e.accountNumber, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
                                                   ),
                                                 ),
                                               )
@@ -176,11 +195,11 @@ class _WithdrawState extends State<WithdrawFromAccount> {
                                             .where((AccountModel element) => element.accountHolderID == user!.userID)
                                             .map(
                                               (AccountModel e) => SearchFieldListItem<String>(
-                                                e.accountHolderName,
-                                                item: e.accountHolderName,
+                                                e.accountNumber,
+                                                item: e.accountNumber,
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(8.0),
-                                                  child: Text(e.accountHolderName.toUpperCase(), style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
+                                                  child: Text(e.accountNumber, style: GoogleFonts.itim(fontSize: 16, fontWeight: FontWeight.w500, color: darkColor)),
                                                 ),
                                               ),
                                             )

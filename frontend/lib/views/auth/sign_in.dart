@@ -106,7 +106,7 @@ class _SignInState extends State<SignIn> {
                         Row(
                           children: <Widget>[
                             Expanded(child: Text("WELCOME TO ONLINE BANKING SYSTEM", style: GoogleFonts.itim(fontSize: 22, fontWeight: FontWeight.w500, color: greyColor))),
-                            const Spacer(),
+                            const SizedBox(width: 10),
                             AnimatedButton(
                               width: 200,
                               height: 40,

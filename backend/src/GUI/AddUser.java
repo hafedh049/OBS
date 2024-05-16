@@ -30,9 +30,7 @@ public class AddUser implements HttpHandler {
         String response = "";
 
         try {
-            if (json.get("role").toString().replaceAll("\"", "") == "ADMIN")
-                Admin.addAdmin(new Admin(json));
-            else if (json.get("role").toString().replaceAll("\"", "") == "CLIENT")
+            if (json.get("role").toString().replaceAll("\"", "").equals("CLIENT"))
                 Admin.addClient(new Client(json));
             else
                 Admin.addAgent(new Agent(json));

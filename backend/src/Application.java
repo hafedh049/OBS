@@ -9,6 +9,7 @@ import GUI.Deposit;
 import GUI.ForgetPassword;
 import GUI.GetAllAccounts;
 import GUI.GetAllBanks;
+import GUI.GetAllTransactions;
 import GUI.GetAllUsers;
 import GUI.Login;
 import GUI.SignUp;
@@ -38,6 +39,7 @@ public class Application {
 			server.createContext("/getAllUsers", new GetAllUsers());
 			server.createContext("/addAccount", new AddAccount());
 			server.createContext("/getAllAccounts", new GetAllAccounts());
+			server.createContext("/getAllTransactions", new GetAllTransactions());
 			server.createContext("/withdraw", new Withdraw());
 			server.createContext("/deposit", new Deposit());
 			server.start();

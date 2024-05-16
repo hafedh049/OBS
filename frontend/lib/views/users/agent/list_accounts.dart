@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
@@ -26,7 +27,15 @@ class _AccountsListState extends State<AccountsList> {
 
   Future<List<AccountModel>> _loadBanks() async {
     try {
-      return <AccountModel>[];
+      final Response response = await Dio().post("$ip/getAllAccounts");
+      return response.data["data"]
+          .map((e) => AccountModel.fromJson(e))
+          .toList()
+          .cast<AccountModel>()
+          .where(
+            (e) => e.accountBankID == user!.bankID,
+          )
+          .toList();
     } catch (e) {
       return Future.error(e);
     }
@@ -87,7 +96,7 @@ class _AccountsListState extends State<AccountsList> {
                                   splashColor: transparentColor,
                                   hoverColor: transparentColor,
                                   highlightColor: transparentColor,
-                                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TransactionsList(senderID: _accounts[index].accountHolderID))),
+                                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => TransactionsList(senderID: _accounts[index].accountNumber))),
                                   child: Container(
                                     width: 300,
                                     padding: const EdgeInsets.all(16),
